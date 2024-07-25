@@ -47,8 +47,8 @@ export default function Page() {
 
   return (
     <div className={`${nunito.className} md:flex md:flex-row`}>
-      <form className="w-3/5 h-[80vh]" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col p-4 h-full">
+      <form className="md:w-3/5 md:h-[80vh]" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col p-4 md:h-full">
           <div className="flex flex-col">
             <label>Adaptação</label>
             <select
@@ -107,10 +107,10 @@ export default function Page() {
           <input className={styles.button} type="submit" value="Criar" />
         </div>
       </form>
-      <div className="flex flex-col w-full p-4 ">
+      <div className="flex flex-col w-full p-4 h-[80vh]">
         <textarea
           defaultValue={isLoading ? "Adaptando questão. Aguarde!" : result}
-          className={styles.textarea}
+          className={`${styles.textarea}`}
           ref={outputRef}
         />
         <div className="flex self-end justify-end h-auto w-10">
