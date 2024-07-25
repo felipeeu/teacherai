@@ -6,6 +6,12 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --mopi-blue: #062c53;
+  --mopi-shadow: 1px 1px 0px 0px var(--mopi-blue),
+    2px 2px 0px 0px var(--mopi-blue), 3px 3px 0px 0px var(--mopi-blue),
+    4px 4px 0px 0px var(--mopi-blue), 5px 5px 0px 0px var(--mopi-blue);
+  --mopi-border: 1px solid var(--mopi-blue);
+  --text-color: var(--mopi-blue);
 }
 
 @media (prefers-color-scheme: dark) {

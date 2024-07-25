@@ -6,12 +6,11 @@
   letter-spacing: 2px;
   text-decoration: none;
   text-transform: uppercase;
-  color: #000;
+  color: var(--text-color);
   cursor: pointer;
-  border: 1px solid;
+  border: var(--mopi-border);
   padding: 0.25em 0.5em;
-  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px,
-    5px 5px 0px 0px;
+  box-shadow: var(--mopi-shadow);
   position: relative;
   user-select: none;
   -webkit-user-select: none;
@@ -32,9 +31,14 @@
 }
 .textarea {
   height: 100%;
-  border: 1px solid;
+  border: var(--mopi-border);
   padding: 0.25em 0.5em;
-  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px,
-    5px 5px 0px 0px;
+  box-shadow: var(--mopi-shadow);
   touch-action: manipulation;
+}
+
+.checkbox {
+  border: var(--mopi-border);
+  padding: 0.25em 0.5em;
+  box-shadow: var(--mopi-shadow);
 }
