@@ -1,6 +1,7 @@
 "use client";
 import { subjects } from "@/app/lib/data";
 import styles from "@/app/ui/adapted.module.css";
+import { nunito } from "@/app/ui/fonts";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -11,7 +12,6 @@ type FormValues = {
   subject: string;
   question: string;
 };
-
 export default function Page() {
   const outputRef = useRef(null);
   const [result, setResult] = useState("");
@@ -46,84 +46,81 @@ export default function Page() {
   console.log("result: ", result);
 
   return (
-    <div className="md:flex md:flex-row">
-      <form className="w-3/5" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col">
-          <label>Adaptação</label>
-          <select
-            {...register("type")}
-            className={styles.textarea}
-            defaultValue={DEFAULT_TYPE}
-          >
-            <option value="tipo2">Tipo 2</option>
-            <option value="tipo3">Tipo 3</option>
-          </select>
-          <label className="pt-3">Disciplina</label>
-          {otherChecked ? (
-            <input
-              {...register("subject", { required: true })}
-              className={styles.textarea}
-            />
-          ) : (
+    <div className={`${nunito.className} md:flex md:flex-row`}>
+      <form className="w-3/5 h-[80vh]" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col p-4 h-full">
+          <div className="flex flex-col">
+            <label>Adaptação</label>
             <select
+              {...register("type")}
               className={styles.textarea}
-              {...register("subject")}
-              defaultValue={DEFAULT_SUBJECT}
+              defaultValue={DEFAULT_TYPE}
             >
-              {subjects.map((subject) => {
-                return (
-                  <option key={subject} value={subject}>
-                    {subject}
-                  </option>
-                );
-              })}
+              <option value="tipo2">Tipo 2</option>
+              <option value="tipo3">Tipo 3</option>
             </select>
-          )}
-
-          <span className="text-red-500 h-4">
-            {errors?.subject && errors.subject.type === "required"
-              ? "Precisa inserir a disciplina"
-              : ""}
-          </span>
-
-          <div className="mb-2">
-            <input
-              className={styles.textarea}
-              type="checkbox"
-              onChange={() => setOtherChecked((prev) => !prev)}
-            />
-            <label className="ml-3">outra</label>
+            <label className="pt-3">Disciplina</label>
+            {otherChecked ? (
+              <input
+                {...register("subject", { required: true })}
+                className={styles.textarea}
+              />
+            ) : (
+              <select
+                className={styles.textarea}
+                {...register("subject")}
+                defaultValue={DEFAULT_SUBJECT}
+              >
+                {subjects.map((subject) => {
+                  return (
+                    <option key={subject} value={subject}>
+                      {subject}
+                    </option>
+                  );
+                })}
+              </select>
+            )}
+            <span className="text-red-500 h-4">
+              {errors?.subject && errors.subject.type === "required"
+                ? "Precisa inserir a disciplina"
+                : ""}
+            </span>
+            <div className="mb-2">
+              <input
+                className={styles.checkbox}
+                type="checkbox"
+                onChange={() => setOtherChecked((prev) => !prev)}
+              />
+              <label className="ml-3">outra</label>
+            </div>
           </div>
           <label>Questão</label>
           <textarea
-            className={styles.textarea}
+            className={`${styles.textarea}`}
             {...register("question", { required: true })}
           ></textarea>
-
           <span className="text-red-500 h-4">
             {errors?.question && errors.question.type === "required"
               ? "Precisa inserir uma questão"
               : ""}
           </span>
-
           <input className={styles.button} type="submit" value="Criar" />
         </div>
       </form>
-      <div className="flex flex-col w-full px-4">
+      <div className="flex flex-col w-full p-4 ">
         <textarea
           defaultValue={isLoading ? "Loading..." : result}
           className={styles.textarea}
-          // className="md:ml-10 h-full bg-gray-50"
           ref={outputRef}
         />
-        <div className="flex justify-end">
+        <div className="flex self-end justify-end h-auto w-10">
           <Image
             onClick={() => copyText(outputRef)}
-            className=" dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
+            className={"pt-2"}
             src="/copy-text.svg"
             alt="Next.js Logo"
-            width={18}
-            height={4}
+            width={30}
+            height={10}
             priority
           />
         </div>
