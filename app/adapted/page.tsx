@@ -109,7 +109,7 @@ export default function Page() {
       </form>
       <div className="flex flex-col w-full p-4 ">
         <textarea
-          defaultValue={isLoading ? "Loading..." : result}
+          defaultValue={isLoading ? "Adaptando questão. Aguarde!" : result}
           className={styles.textarea}
           ref={outputRef}
         />
