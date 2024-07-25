@@ -1,4 +1,6 @@
 "use client";
+import { subjects } from "@/app/lib/data";
+import styles from "@/app/ui/adapted.module.css";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -13,6 +15,7 @@ type FormValues = {
 export default function Page() {
   const outputRef = useRef(null);
   const [result, setResult] = useState("");
+  const [otherChecked, setOtherChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -38,8 +41,10 @@ export default function Page() {
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
-  const DEFAULT_VALUE = "tipo2";
+  const DEFAULT_TYPE = "tipo2";
+  const DEFAULT_SUBJECT = "Química";
   console.log("result: ", result);
+
   return (
     <div className="md:flex md:flex-row">
       <form className="w-3/5" onSubmit={handleSubmit(onSubmit)}>
@@ -47,48 +52,84 @@ export default function Page() {
           <label>Adaptação</label>
           <select
             {...register("type")}
-            className="mb-4"
-            defaultValue={DEFAULT_VALUE}
+            className={styles.textarea}
+            defaultValue={DEFAULT_TYPE}
           >
             <option value="tipo2">Tipo 2</option>
             <option value="tipo3">Tipo 3</option>
           </select>
-          <label>Disciplina</label>
-          <input
-            {...register("subject")}
-            className={`${errors?.subject ? "" : "mb-4"}`}
-          />
-          {errors?.subject && (
-            <span className="text-red-500">{errors.subject.message}</span>
+          <label className="pt-3">Disciplina</label>
+          {otherChecked ? (
+            <input
+              {...register("subject", { required: true })}
+              className={styles.textarea}
+            />
+          ) : (
+            <select
+              className={styles.textarea}
+              {...register("subject")}
+              defaultValue={DEFAULT_SUBJECT}
+            >
+              {subjects.map((subject) => {
+                return (
+                  <option key={subject} value={subject}>
+                    {subject}
+                  </option>
+                );
+              })}
+            </select>
           )}
+
+          <span className="text-red-500 h-4">
+            {errors?.subject && errors.subject.type === "required"
+              ? "Precisa inserir a disciplina"
+              : ""}
+          </span>
+
+          <div className="mb-2">
+            <input
+              className={styles.textarea}
+              type="checkbox"
+              onChange={() => setOtherChecked((prev) => !prev)}
+            />
+            <label className="ml-3">outra</label>
+          </div>
           <label>Questão</label>
           <textarea
-            className={`${errors?.question ? "" : "mb-4"}`}
-            {...register("question")}
+            className={styles.textarea}
+            {...register("question", { required: true })}
           ></textarea>
-          {errors?.question && (
-            <span className="text-red-500">{errors.question.message}</span>
-          )}
-          <input className="cursor-pointer mb-8" type="submit" />
+
+          <span className="text-red-500 h-4">
+            {errors?.question && errors.question.type === "required"
+              ? "Precisa inserir uma questão"
+              : ""}
+          </span>
+
+          <input className={styles.button} type="submit" value="Criar" />
         </div>
       </form>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full px-4">
         <textarea
           defaultValue={isLoading ? "Loading..." : result}
-          className="md:ml-10 h-full bg-gray-50"
+          className={styles.textarea}
+          // className="md:ml-10 h-full bg-gray-50"
           ref={outputRef}
         />
-
-        <Image
-          onClick={() => copyText(outputRef)}
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/copy-text.svg"
-          alt="Next.js Logo"
-          width={22}
-          height={5}
-          priority
-        />
-        <button onClick={() => setResult("")}>Limpar</button>
+        <div className="flex justify-end">
+          <Image
+            onClick={() => copyText(outputRef)}
+            className=" dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
+            src="/copy-text.svg"
+            alt="Next.js Logo"
+            width={18}
+            height={4}
+            priority
+          />
+        </div>
+        <button className={styles.button} onClick={() => setResult("")}>
+          Limpar
+        </button>
       </div>
     </div>
   );

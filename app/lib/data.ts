@@ -15,3 +15,22 @@ export const adaptedExams: any = {
       Evite figuras de linguagem. `,
   },
 };
+
+export const subjects = [
+  "Química",
+  "Física",
+  "Biologia",
+  "Matemática",
+  "História",
+  "Geografia",
+  "Ciências",
+  "Inglês",
+  "Espanhol",
+  "Produção Textual",
+  "Língua Portuguesa",
+  "Educação Física",
+  "Artes",
+  "Filosofia",
+  "Sociologia",
+  "Literatura",
+];
