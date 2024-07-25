@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const question = searchParams.get("question") as string;
   const subject = searchParams.get("subject") as string;
   const type = searchParams.get("type") as string;
-  const apiKey = "AIzaSyA6PT4jLBKBCrzgJ5OcmYRzo4ragWcPlXs"; // process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }
