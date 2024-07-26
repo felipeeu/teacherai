@@ -1,5 +1,6 @@
 "use client";
 import { subjects } from "@/app/lib/data";
+import { parseMarkdown } from "@/app/lib/parsemd";
 import styles from "@/app/ui/adapted.module.css";
 import { nunito } from "@/app/ui/fonts";
 import Image from "next/image";
@@ -63,8 +64,8 @@ export default function Page() {
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
-
-  console.log("result: ", result);
+  const parsedResult = parseMarkdown(result);
+  console.log("parsedResult", parsedResult);
 
   return (
     <div className={`${nunito.className} md:flex md:flex-row`}>
@@ -129,11 +130,12 @@ export default function Page() {
         </div>
       </form>
       <div className="flex flex-col w-full p-4 h-[80vh]">
-        <textarea
-          defaultValue={isLoading ? "Adaptando questão. Aguarde!" : result}
+        <div
+          dangerouslySetInnerHTML={{ __html: parsedResult }}
           className={`${styles.textarea}`}
           ref={outputRef}
         />
+
         <div className="flex self-end justify-end h-auto w-10">
           <Image
             onClick={() => copyText(outputRef)}

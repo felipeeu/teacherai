@@ -1,9 +1,8 @@
 import { MutableRefObject } from "react";
 
 export const copyText = (ref: MutableRefObject<null>) => {
-  const textArea = ref.current as any;
-  textArea.select();
-  textArea.setSelectionRange(0, 99999);
+  const divContent = ref.current as any;
+  const textToCopy = divContent.texContent || divContent.innerText;
 
-  navigator.clipboard.writeText(textArea.value);
+  navigator.clipboard.writeText(textToCopy);
 };
