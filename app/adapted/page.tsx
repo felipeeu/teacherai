@@ -7,6 +7,9 @@ import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { copyText } from "../utils/copyText";
 
+const DEFAULT_TYPE = "tipo2";
+const DEFAULT_SUBJECT = "Química";
+
 type FormValues = {
   type: string;
   subject: string;
@@ -20,8 +23,27 @@ export default function Page() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    defaultValues: {
+      type: DEFAULT_TYPE,
+      subject: DEFAULT_SUBJECT,
+      question: "",
+    },
+  });
+
+  const handleCheckBox = () => {
+    setOtherChecked((prev) => {
+      if (prev === false) {
+        setValue("subject", "");
+        return !prev;
+      } else {
+        setValue("subject", DEFAULT_SUBJECT);
+        return !prev;
+      }
+    });
+  };
 
   const handleFetch = async ({ subject, type, question }: FormValues) => {
     try {
@@ -41,8 +63,7 @@ export default function Page() {
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
-  const DEFAULT_TYPE = "tipo2";
-  const DEFAULT_SUBJECT = "Química";
+
   console.log("result: ", result);
 
   return (
@@ -89,7 +110,7 @@ export default function Page() {
               <input
                 className={styles.checkbox}
                 type="checkbox"
-                onChange={() => setOtherChecked((prev) => !prev)}
+                onChange={handleCheckBox}
               />
               <label className="ml-3">outra</label>
             </div>
