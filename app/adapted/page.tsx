@@ -6,6 +6,7 @@ import { nunito } from "@/app/ui/fonts";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
 import { copyText } from "../utils/copyText";
 
 const DEFAULT_TYPE = "tipo2";
@@ -57,18 +58,22 @@ export default function Page() {
       if (data.response) {
         setResult(data.response);
         setIsLoading(false);
+      } else {
+        toast.error(
+          "Não foi possível criar sua questão. Tente novamente mais tarde!"
+        );
       }
     } catch (error) {
-      console.log(error);
+      toast.error(`${error}`);
     }
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
   const parsedResult = parseMarkdown(result);
-  console.log("parsedResult", parsedResult);
 
   return (
     <div className={`${nunito.className} md:flex md:flex-row`}>
+      <Toaster />
       <form className="md:w-3/5 md:h-[80vh]" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col p-4 md:h-full">
           <div className="flex flex-col">
@@ -130,26 +135,41 @@ export default function Page() {
         </div>
       </form>
       <div className="flex flex-col w-full p-4 h-[80vh]">
+        {isLoading ? (
+          <p className="animate-bounce text-xl">Gerando questão. Aguarde!</p>
+        ) : (
+          <p className="text-xl">Sua questão será gerada aqui:</p>
+        )}
+
         <div
           dangerouslySetInnerHTML={{ __html: parsedResult }}
-          className={`${styles.textarea}`}
+          className={`${styles.textarea} overflow-scroll`}
           ref={outputRef}
         />
-
         <div className="flex self-end justify-end h-auto w-10">
-          <Image
-            onClick={() => copyText(outputRef)}
-            className={"pt-2"}
-            src="/copy-text.svg"
-            alt="Next.js Logo"
-            width={30}
-            height={10}
-            priority
-          />
+          {result ? (
+            <Image
+              onClick={() => {
+                copyText(outputRef);
+              }}
+              className={"pt-2 cursor-pointer active:scale-[1.2] "}
+              src="/copy-text.svg"
+              alt="Next.js Logo"
+              width={30}
+              height={10}
+              priority
+            />
+          ) : (
+            <div className="h-10" />
+          )}
         </div>
-        <button className={styles.button} onClick={() => setResult("")}>
-          Limpar
-        </button>
+        {result ? (
+          <button className={styles.button} onClick={() => setResult("")}>
+            Limpar
+          </button>
+        ) : (
+          <div className="h-16" />
+        )}
       </div>
     </div>
   );
