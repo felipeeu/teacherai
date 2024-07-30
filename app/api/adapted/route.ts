@@ -1,4 +1,4 @@
-import { getAdeptedPrompt } from "@/app/lib/prompt";
+import { getAdeptedPrompt, getSecondExamPrompt } from "@/app/lib/prompt";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
@@ -7,6 +7,8 @@ export async function GET(request: Request) {
   const question = searchParams.get("question") as string;
   const subject = searchParams.get("subject") as string;
   const type = searchParams.get("type") as string;
+  const level = searchParams.get("level") as string;
+  const category = searchParams.get("category") as string;
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
@@ -26,7 +28,9 @@ export async function GET(request: Request) {
     const chatSession = model.startChat({
       generationConfig,
     });
-    const prompt = getAdeptedPrompt(subject, type, question);
+    const prompt = level
+      ? getSecondExamPrompt(subject, level, category, question)
+      : getAdeptedPrompt(subject, type, question);
     const result = await chatSession.sendMessage(prompt);
     return NextResponse.json({ response: result.response.text() });
   } catch (error) {
