@@ -34,3 +34,28 @@ export const subjects = [
   "Sociologia",
   "Literatura",
 ];
+
+export const levels: any[] = [
+  { value: "6year", completed: "6° ano do Ensino Fundamental" },
+  { value: "7year", completed: "7° ano do Ensino Fundamental" },
+  { value: "8year", completed: "8° ano do Ensino Fundamental" },
+  { value: "9year", completed: "9° ano do Ensino Fundamental" },
+  { value: "1level", completed: "1ᵃ série do Ensino Médio" },
+  { value: "2level", completed: "2ᵃ série do Ensino Médio" },
+  { value: "3level", completed: "3ᵃ série do Ensino Médio" },
+];
+
+export const levelMap: any = {
+  "6year": "6° ano do Ensino Fundamental",
+  "7year": "7° ano do Ensino Fundamental",
+  "8year": "8° ano do Ensino Fundamental",
+  "9year": "9° ano do Ensino Fundamental",
+  "1level": "1ᵃ série do Ensino Médio",
+  "2level": "2ᵃ série do Ensino Médio",
+  "3level": "3ᵃ série do Ensino Médio",
+};
+
+export const categoryMap: any = {
+  multiple: "Múltipla Escolha",
+  discursive: "Discursiva",
+};
