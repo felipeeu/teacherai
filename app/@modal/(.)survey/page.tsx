@@ -4,7 +4,7 @@ import { Modal } from "./modal";
 export default function SurveyModal() {
   return (
     <Modal>
-      <GoogleForm iframeSrc="https://docs.google.com/forms/d/e/1FAIpQLScidYZ74YCKweeVRTGmnA5ReMfdCKHdgakyERIT_kY-YvBGwQ/viewform?embedded=true" />{" "}
+      <GoogleForm iframeSrc="https://docs.google.com/forms/d/e/1FAIpQLSeFa1HAXeCwggn7taMr5r9BYrKwFizglPiA5dnytItdRbpejg/viewform?embedded=true" />{" "}
     </Modal>
   );
 }
