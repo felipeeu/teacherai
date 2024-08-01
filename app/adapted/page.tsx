@@ -158,7 +158,7 @@ export default function Page() {
                 {...register("subject")}
                 defaultValue={DEFAULT_SUBJECT}
               >
-                {subjects.map((subject) => {
+                {subjects.sort().map((subject) => {
                   return (
                     <option key={subject} value={subject}>
                       {subject}
