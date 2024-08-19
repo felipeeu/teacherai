@@ -27,6 +27,8 @@ export const getSecondExamPrompt = (
           Abaixo, seguem os direcionamentos para a criação das questões:
           Questão que esteja adequada para alunos de ${levelMap[level]}.
           A questão criada será chamada de NOVA QUESTÃO
+          OBRIGATORIAMENTE A nova questão formulada DEVERÁ SEMPRE vir escrita na mesma língua de origem que a questão original, ou seja, se ela vier em inglês, deverá vir totalmente escrita em inglês.
+          SE A QUESTÃO ORIGINAL FOR DE INGLÊS OU ESPANHOL A NOVA QUESTÃO NUNCA DEVERÁ VIR ESCRITA EM PORTUGUÊS.
           Os objetos de conhecimento DEVEM SER PRIORITARIAMENTE E OBRIGATORIAMENTE ABORDADOS.
           Apresentar HABILIDADES PRÓXIMAS DA questão original.
           Apresentar os mesmos conceitos que a questão original.
@@ -39,6 +41,8 @@ export const getSecondExamPrompt = (
           A NOVA QUESTÃO precisa ter conceitos precisos, sem erros.
           Comando da NOVA QUESTÃO não deve NUNCA pedir para selecionar a alternativa incorreta.
           A NOVA QUESTÃO podem ser perguntas ou podem ser parte de texto para continuação da resposta nas opções.
+          Caso a O PROFESSOR E A questão seja de matemática, É obrigatório, 
+          QUE OS VALORES DA QUESTÃO ORIGINAL VENHAM DIFERENTES, CONTANTO QUE TENHA RESULTADO PLAUSÍVEL.
           Comando da NOVA QUESTÃO não pode vir com NEGATIVAS, por exemplo, "marque a alternativa que NÃO…
           Comando não pode vir com o termo "com base em seu conhecimento"ou "com base no que você aprendeu"
           Questão base:
