@@ -1,17 +1,15 @@
 "use client";
-import { categoryMap, levels, subjects } from "@/app/lib/data";
+import { categoryMap, subjects } from "@/app/lib/data";
 import { parseMarkdown } from "@/app/lib/parsemd";
-import styles from "@/app/ui/adapted.module.css";
 import { nunito } from "@/app/ui/fonts";
+import styles from "@/app/ui/question.module.css";
+import { copyText } from "@/app/utils/copyText";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import RadioGroup from "../ui/radiogroup";
-import { copyText } from "../utils/copyText";
 
 const DEFAULT_EXAM = "adapted";
-const DEFAULT_TYPE = "tipo2";
 const DEFAULT_SUBJECT = "Química";
 const DEFAULT_CATEGORY = "multiple";
 const DEFAULT_LEVEL = "8year";
@@ -19,14 +17,13 @@ const DEFAULT_LEVEL = "8year";
 type FormValues = {
   type: string;
   subject: string;
-  question: string;
+  postscript: string;
   level: string;
   category: string;
 };
 export default function Page() {
   const outputRef = useRef(null);
   const [result, setResult] = useState("");
-  const [exam, setExam] = useState(DEFAULT_EXAM);
   const [otherChecked, setOtherChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -36,9 +33,8 @@ export default function Page() {
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      type: DEFAULT_TYPE,
       subject: DEFAULT_SUBJECT,
-      question: "",
+      postscript: "",
       level: DEFAULT_LEVEL,
       category: DEFAULT_CATEGORY,
     },
@@ -55,30 +51,18 @@ export default function Page() {
       }
     });
   };
-
-  const handleRadioButton = (value: string) => {
-    setExam(value);
-    setValue("level", DEFAULT_LEVEL);
-    setValue("category", DEFAULT_CATEGORY);
-  };
-
   const handleFetch = async ({
     subject,
     type,
-    question,
+    postscript,
     level,
     category,
   }: FormValues) => {
     try {
       setIsLoading(true);
-      const response =
-        exam === DEFAULT_EXAM
-          ? await fetch(
-              `/api/adapted/?subject=${subject}&type=${type}&question=${question}`
-            )
-          : await fetch(
-              `/api/adapted/?subject=${subject}&question=${question}&level=${level}&category=${category}`
-            );
+      const response = await fetch(
+        `/api/adapted/?subject=${subject}&postscript=${postscript}&level=${level}&category=${category}`
+      );
       const data = await response.json();
 
       if (data.response) {
@@ -102,50 +86,6 @@ export default function Page() {
       <form className="md:w-3/5 md:h-[80vh]" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col p-4 md:h-full">
           <div className="flex flex-col">
-            <RadioGroup
-              options={[
-                { id: "adapted", value: "adapted", label: "Adaptada" },
-                { id: "second", value: "second", label: "Substitutiva" },
-              ]}
-              title={"Escolha o tipo de Prova:"}
-              name={"exam"}
-              onChange={handleRadioButton}
-              value={exam}
-            />
-            {exam === DEFAULT_EXAM ? (
-              <>
-                <label>Adaptação</label>
-                <select
-                  {...register("type")}
-                  className={styles.textarea}
-                  defaultValue={DEFAULT_TYPE}
-                >
-                  <option value="tipo2">Tipo 2</option>
-                  <option value="tipo3">Tipo 3</option>
-                </select>
-              </>
-            ) : (
-              <>
-                <label className="pt-3">Ano/Série</label>
-                <select className={styles.textarea} {...register("level")}>
-                  {levels.map(
-                    ({
-                      value,
-                      completed,
-                    }: {
-                      value: string;
-                      completed: string;
-                    }) => {
-                      return (
-                        <option key={value} value={value}>
-                          {completed}
-                        </option>
-                      );
-                    }
-                  )}
-                </select>
-              </>
-            )}
             <label className="pt-3">Disciplina</label>
             {otherChecked ? (
               <input
@@ -180,33 +120,21 @@ export default function Page() {
               />
               <label className="ml-3">outra</label>
             </div>
-            {exam === DEFAULT_EXAM ? null : (
-              <>
-                <label>Tipo de Questão</label>
-                <select
-                  {...register("category")}
-                  className={`${styles.textarea} mb-2`}
-                  defaultValue={DEFAULT_TYPE}
-                >
-                  <option value="multiple">{categoryMap["multiple"]}</option>
-                  <option value="discursive">
-                    {categoryMap["discursive"]}
-                  </option>
-                </select>
-              </>
-            )}
+            <label>Tipo de Questão</label>
+            <select
+              {...register("category")}
+              className={`${styles.textarea} mb-2`}
+              defaultValue={DEFAULT_CATEGORY}
+            >
+              <option value="multiple">{categoryMap["multiple"]}</option>
+              <option value="discursive">{categoryMap["discursive"]}</option>
+            </select>
           </div>
-
-          <label>Questão</label>
+          <label>Observação</label>
           <textarea
-            className={`${styles.textarea}`}
-            {...register("question", { required: true })}
+            className={`${styles.textarea} !h-1/4`}
+            {...register("postscript")}
           ></textarea>
-          <span className="text-red-500 h-4">
-            {errors?.question && errors.question.type === "required"
-              ? "Precisa inserir uma questão"
-              : ""}
-          </span>
           <input className={styles.button} type="submit" value="Criar" />
         </div>
       </form>
@@ -216,7 +144,6 @@ export default function Page() {
         ) : (
           <p className="text-xl">Sua questão será gerada aqui:</p>
         )}
-
         <div
           dangerouslySetInnerHTML={{ __html: parsedResult }}
           className={`${styles.textarea} overflow-scroll`}
