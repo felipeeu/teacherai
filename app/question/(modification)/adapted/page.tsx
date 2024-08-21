@@ -77,7 +77,7 @@ export default function Page() {
               `/api/adapted/?subject=${subject}&type=${type}&question=${question}`
             )
           : await fetch(
-              `/api/adapted/?subject=${subject}&question=${question}&level=${level}&category=${category}`
+              `/api/substitute/?subject=${subject}&question=${question}&level=${level}&category=${category}`
             );
       const data = await response.json();
 

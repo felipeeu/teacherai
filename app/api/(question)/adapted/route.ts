@@ -1,24 +1,22 @@
-import { getAdeptedPrompt, getSecondExamPrompt } from "@/app/lib/prompt";
+import { getAdeptedPrompt } from "@/app/lib/prompt";
 import { geminiApi } from "@/app/utils/geminiApi";
 import { GenerateContentResult } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+  const { searchParams }: { searchParams: URLSearchParams } = new URL(
+    request.url
+  );
   const question = searchParams.get("question") as string;
   const subject = searchParams.get("subject") as string;
   const type = searchParams.get("type") as string;
-  const level = searchParams.get("level") as string;
-  const category = searchParams.get("category") as string;
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY as string;
 
   if (!apiKey) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }
 
-  const prompt = level
-    ? getSecondExamPrompt(subject, level, category, question)
-    : getAdeptedPrompt(subject, type, question);
+  const prompt = getAdeptedPrompt(subject, type, question);
 
   try {
     const result: GenerateContentResult = await geminiApi(prompt, apiKey);

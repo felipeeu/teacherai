@@ -4,7 +4,7 @@ export const getAdeptedPrompt = (
   subject: string,
   type: string,
   question: string
-) => {
+): string => {
   return `Sou professor de ${subject} de uma escola que apresenta um número considerável de alunos de inclusão. Estes alunos podem ser categorizados em alguns tipos. ,
     Para cada tipo é necessário a adaptação das questões de provas, para que elas estejam de acordo com o nível de habilidades destes estudantes.,
     Gostaria que você adaptasse a questão que colocarei aqui abaixo para os alunos que estão classificados como ${type}.
@@ -19,7 +19,7 @@ export const getSecondExamPrompt = (
   level: string,
   category: string,
   question: string
-) => {
+): string => {
   return `Sou professor de ${subject} de uma escola, para turmas de ${levelMap[level]}, e preciso criar questões para prova de 
           2ª chamada para minha turma, para que eles possam fazer em uma avaliação formal. 
           Estas questões precisam apresentar os conceitos dos objetos de conhecimento abordados, mas alcançando os objetivos estipulados. 
@@ -49,4 +49,8 @@ export const getSecondExamPrompt = (
           QUESTÃO 01
           ${question}
           A partir desses dados, crie a questão modificada.`;
+};
+
+export const getNewQuestionPrompt = (): string => {
+  return ``;
 };
