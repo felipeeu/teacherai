@@ -7,6 +7,13 @@ export async function GET(request: Request) {
   const { searchParams }: { searchParams: URLSearchParams } = new URL(
     request.url
   );
+  const subject = searchParams.get("subject") as string;
+  const level = searchParams.get("level") as string;
+  const quantity = searchParams.get("quantity") as string;
+  const category = searchParams.get("category") as string;
+  const skillObject = searchParams.get("skillObject") as string;
+  const baseText = searchParams.get("baseText") as string;
+  const learnerObject = searchParams.get("learnerObject") as string;
 
   const apiKey = process.env.GEMINI_API_KEY as string;
 
@@ -14,7 +21,15 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }
 
-  const prompt: string = getNewQuestionPrompt();
+  const prompt: string = getNewQuestionPrompt(
+    subject,
+    level,
+    quantity,
+    category,
+    skillObject,
+    baseText,
+    learnerObject
+  );
 
   try {
     const result: GenerateContentResult = await geminiApi(prompt, apiKey);

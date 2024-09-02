@@ -1,5 +1,5 @@
 "use client";
-import { categoryMap, subjects } from "@/app/lib/data";
+import { categoryMap, levels, subjects } from "@/app/lib/data";
 import { parseMarkdown } from "@/app/lib/parsemd";
 import { nunito } from "@/app/ui/fonts";
 import styles from "@/app/ui/question.module.css";
@@ -9,17 +9,19 @@ import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 
-const DEFAULT_EXAM = "adapted";
 const DEFAULT_SUBJECT = "Química";
 const DEFAULT_CATEGORY = "multiple";
 const DEFAULT_LEVEL = "8year";
 
 type FormValues = {
-  type: string;
+  quantity: string;
   subject: string;
   postscript: string;
   level: string;
   category: string;
+  skillObject: string;
+  baseText: string;
+  learnerObject: string;
 };
 export default function Page() {
   const outputRef = useRef(null);
@@ -53,15 +55,23 @@ export default function Page() {
   };
   const handleFetch = async ({
     subject,
-    type,
-    postscript,
+    quantity,
     level,
     category,
+    skillObject,
+    baseText,
+    learnerObject,
   }: FormValues) => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `/api/adapted/?subject=${subject}&postscript=${postscript}&level=${level}&category=${category}`
+        `/api/new/?subject=${subject}
+                      &quantity=${quantity}
+                      &level=${level}
+                      &category=${category}
+                      &skillObject=${skillObject}
+                      &baseText=${baseText}
+                      &learnerObject=${learnerObject}`
       );
       const data = await response.json();
 
@@ -107,12 +117,13 @@ export default function Page() {
                 })}
               </select>
             )}
+
             <span className="text-red-500 h-4">
               {errors?.subject && errors.subject.type === "required"
                 ? "Precisa inserir a disciplina"
                 : ""}
             </span>
-            <div className="mb-2">
+            <div>
               <input
                 className={styles.checkbox}
                 type="checkbox"
@@ -120,7 +131,27 @@ export default function Page() {
               />
               <label className="ml-3">outra</label>
             </div>
-            <label>Tipo de Questão</label>
+
+            <label className="pt-2">Ano/Série</label>
+            <select className={styles.textarea} {...register("level")}>
+              {levels.map(
+                ({
+                  value,
+                  completed,
+                }: {
+                  value: string;
+                  completed: string;
+                }) => {
+                  return (
+                    <option key={value} value={value}>
+                      {completed}
+                    </option>
+                  );
+                }
+              )}
+            </select>
+
+            <label className="pt-2">Tipo de Questão</label>
             <select
               {...register("category")}
               className={`${styles.textarea} mb-2`}
@@ -129,12 +160,33 @@ export default function Page() {
               <option value="multiple">{categoryMap["multiple"]}</option>
               <option value="discursive">{categoryMap["discursive"]}</option>
             </select>
+
+            <label>Quantidade de Questões</label>
+
+            <input
+              className={`${styles.textarea} !h-8`}
+              type="number"
+              {...register("quantity")}
+            />
           </div>
-          <label>Observação</label>
+          <label className="pt-2">Objetivos de Conhecimento</label>
+          <input
+            className={`${styles.textarea} !h-12`}
+            {...register("skillObject")}
+          ></input>
+
+          <label className="pt-2">Objetivos de Aprendizagem (opcional)</label>
+          <input
+            className={`${styles.textarea} !h-12`}
+            {...register("learnerObject")}
+          ></input>
+
+          <label className="pt-2">Texto Base (ou link)</label>
           <textarea
-            className={`${styles.textarea} !h-1/4`}
-            {...register("postscript")}
+            className={styles.textarea}
+            {...register("baseText")}
           ></textarea>
+
           <input className={styles.button} type="submit" value="Criar" />
         </div>
       </form>
