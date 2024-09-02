@@ -87,13 +87,16 @@ export default function Page() {
       toast.error(`${error}`);
     }
   };
-
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
   const parsedResult = parseMarkdown(result);
   return (
     <div className={`${nunito.className} md:flex md:flex-row`}>
       <Toaster />
-      <form className="md:w-3/5 md:h-[80vh]" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        noValidate
+        className="md:w-3/5 md:h-[80vh]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex flex-col p-4 md:h-full">
           <div className="flex flex-col">
             <label className="pt-3">Disciplina</label>
@@ -105,7 +108,7 @@ export default function Page() {
             ) : (
               <select
                 className={styles.textarea}
-                {...register("subject")}
+                {...register("subject", { required: true })}
                 defaultValue={DEFAULT_SUBJECT}
               >
                 {subjects.sort().map((subject) => {
@@ -166,15 +169,20 @@ export default function Page() {
             <input
               className={`${styles.textarea} !h-8`}
               type="number"
-              {...register("quantity")}
+              {...(register("quantity"), { required: true })}
+              defaultValue={1}
             />
           </div>
           <label className="pt-2">Objetivos de Conhecimento</label>
           <input
             className={`${styles.textarea} !h-12`}
-            {...register("skillObject")}
+            {...(register("skillObject"), { required: true })}
           ></input>
-
+          <span className="text-red-500 h-4">
+            {errors?.skillObject && errors.skillObject.type === "required"
+              ? "Precisa inserir um objetivo de conhecimento"
+              : ""}
+          </span>
           <label className="pt-2">Objetivos de Aprendizagem (opcional)</label>
           <input
             className={`${styles.textarea} !h-12`}
@@ -184,8 +192,13 @@ export default function Page() {
           <label className="pt-2">Texto Base (ou link)</label>
           <textarea
             className={styles.textarea}
-            {...register("baseText")}
+            {...register("baseText", { required: true })}
           ></textarea>
+          <span className="text-red-500 h-4">
+            {errors?.baseText && errors.baseText.type === "required"
+              ? "Precisa inserir um texto base ou um link."
+              : ""}
+          </span>
 
           <input className={styles.button} type="submit" value="Criar" />
         </div>
