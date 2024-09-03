@@ -12,11 +12,11 @@ import toast, { Toaster } from "react-hot-toast";
 const DEFAULT_SUBJECT = "Química";
 const DEFAULT_CATEGORY = "multiple";
 const DEFAULT_LEVEL = "8year";
+const DEFAULT_QUANTITY = "1";
 
 type FormValues = {
   quantity: string;
   subject: string;
-  postscript: string;
   level: string;
   category: string;
   skillObject: string;
@@ -36,7 +36,6 @@ export default function Page() {
   } = useForm<FormValues>({
     defaultValues: {
       subject: DEFAULT_SUBJECT,
-      postscript: "",
       level: DEFAULT_LEVEL,
       category: DEFAULT_CATEGORY,
     },
@@ -65,13 +64,7 @@ export default function Page() {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `/api/new/?subject=${subject}
-                      &quantity=${quantity}
-                      &level=${level}
-                      &category=${category}
-                      &skillObject=${skillObject}
-                      &baseText=${baseText}
-                      &learnerObject=${learnerObject}`
+        `/api/new/?subject=${subject}&quantity=${quantity}&level=${level}&category=${category}&skillObject=${skillObject}&baseText=${baseText}&learnerObject=${learnerObject}`
       );
       const data = await response.json();
 
@@ -164,32 +157,42 @@ export default function Page() {
               <option value="discursive">{categoryMap["discursive"]}</option>
             </select>
 
-            <label>Quantidade de Questões</label>
+            <label htmlFor="quantity">Quantidade de Questões</label>
 
             <input
               className={`${styles.textarea} !h-8`}
               type="number"
-              {...(register("quantity"), { required: true })}
-              defaultValue={1}
+              {...register("quantity", { required: true })}
+              defaultValue={DEFAULT_QUANTITY}
             />
+            <span className="text-red-500 h-4">
+              {errors?.quantity && errors.quantity.type === "required"
+                ? "Precisa inserir a quantidade de questões"
+                : ""}
+            </span>
+            <label htmlFor="skillObject" className="pt-2">
+              Objetivos de Conhecimento
+            </label>
+            <input
+              className={styles.textarea}
+              {...register("skillObject", { required: true })}
+            ></input>
+            <span className="text-red-500 h-4">
+              {errors?.skillObject && errors.skillObject.type === "required"
+                ? "Precisa inserir um objetivo de conhecimento"
+                : ""}
+            </span>
+            <label htmlFor="learnerObject" className="pt-2">
+              Objetivos de Aprendizagem (opcional)
+            </label>
+            <input
+              className={styles.textarea}
+              {...register("learnerObject")}
+            ></input>
           </div>
-          <label className="pt-2">Objetivos de Conhecimento</label>
-          <input
-            className={`${styles.textarea} !h-12`}
-            {...(register("skillObject"), { required: true })}
-          ></input>
-          <span className="text-red-500 h-4">
-            {errors?.skillObject && errors.skillObject.type === "required"
-              ? "Precisa inserir um objetivo de conhecimento"
-              : ""}
-          </span>
-          <label className="pt-2">Objetivos de Aprendizagem (opcional)</label>
-          <input
-            className={`${styles.textarea} !h-12`}
-            {...register("learnerObject")}
-          ></input>
-
-          <label className="pt-2">Texto Base (ou link)</label>
+          <label htmlFor="baseText" className="pt-2">
+            Texto Base (ou link)
+          </label>
           <textarea
             className={styles.textarea}
             {...register("baseText", { required: true })}
@@ -199,7 +202,6 @@ export default function Page() {
               ? "Precisa inserir um texto base ou um link."
               : ""}
           </span>
-
           <input className={styles.button} type="submit" value="Criar" />
         </div>
       </form>
