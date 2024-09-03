@@ -1,32 +1,31 @@
 "use client";
 import { categoryMap, levels, subjects } from "@/app/lib/data";
 import { parseMarkdown } from "@/app/lib/parsemd";
-import styles from "@/app/ui/adapted.module.css";
 import { nunito } from "@/app/ui/fonts";
+import styles from "@/app/ui/question.module.css";
+import { copyText } from "@/app/utils/copyText";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import RadioGroup from "../ui/radiogroup";
-import { copyText } from "../utils/copyText";
 
-const DEFAULT_EXAM = "adapted";
-const DEFAULT_TYPE = "tipo2";
 const DEFAULT_SUBJECT = "Química";
 const DEFAULT_CATEGORY = "multiple";
 const DEFAULT_LEVEL = "8year";
+const DEFAULT_QUANTITY = "1";
 
 type FormValues = {
-  type: string;
+  quantity: string;
   subject: string;
-  question: string;
   level: string;
   category: string;
+  skillObject: string;
+  baseText: string;
+  learnerObject: string;
 };
 export default function Page() {
   const outputRef = useRef(null);
   const [result, setResult] = useState("");
-  const [exam, setExam] = useState(DEFAULT_EXAM);
   const [otherChecked, setOtherChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -36,9 +35,7 @@ export default function Page() {
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      type: DEFAULT_TYPE,
       subject: DEFAULT_SUBJECT,
-      question: "",
       level: DEFAULT_LEVEL,
       category: DEFAULT_CATEGORY,
     },
@@ -55,30 +52,20 @@ export default function Page() {
       }
     });
   };
-
-  const handleRadioButton = (value: string) => {
-    setExam(value);
-    setValue("level", DEFAULT_LEVEL);
-    setValue("category", DEFAULT_CATEGORY);
-  };
-
   const handleFetch = async ({
     subject,
-    type,
-    question,
+    quantity,
     level,
     category,
+    skillObject,
+    baseText,
+    learnerObject,
   }: FormValues) => {
     try {
       setIsLoading(true);
-      const response =
-        exam === DEFAULT_EXAM
-          ? await fetch(
-              `/api/adapted/?subject=${subject}&type=${type}&question=${question}`
-            )
-          : await fetch(
-              `/api/adapted/?subject=${subject}&question=${question}&level=${level}&category=${category}`
-            );
+      const response = await fetch(
+        `/api/new/?subject=${subject}&quantity=${quantity}&level=${level}&category=${category}&skillObject=${skillObject}&baseText=${baseText}&learnerObject=${learnerObject}`
+      );
       const data = await response.json();
 
       if (data.response) {
@@ -93,59 +80,18 @@ export default function Page() {
       toast.error(`${error}`);
     }
   };
-
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
   const parsedResult = parseMarkdown(result);
   return (
     <div className={`${nunito.className} md:flex md:flex-row`}>
       <Toaster />
-      <form className="md:w-3/5 md:h-[80vh]" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        noValidate
+        className="md:w-3/5 md:h-[80vh]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex flex-col p-4 md:h-full">
           <div className="flex flex-col">
-            <RadioGroup
-              options={[
-                { id: "adapted", value: "adapted", label: "Adaptada" },
-                { id: "second", value: "second", label: "Substitutiva" },
-              ]}
-              title={"Escolha o tipo de Prova:"}
-              name={"exam"}
-              onChange={handleRadioButton}
-              value={exam}
-            />
-            {exam === DEFAULT_EXAM ? (
-              <>
-                <label>Adaptação</label>
-                <select
-                  {...register("type")}
-                  className={styles.textarea}
-                  defaultValue={DEFAULT_TYPE}
-                >
-                  <option value="tipo2">Tipo 2</option>
-                  <option value="tipo3">Tipo 3</option>
-                </select>
-              </>
-            ) : (
-              <>
-                <label className="pt-3">Ano/Série</label>
-                <select className={styles.textarea} {...register("level")}>
-                  {levels.map(
-                    ({
-                      value,
-                      completed,
-                    }: {
-                      value: string;
-                      completed: string;
-                    }) => {
-                      return (
-                        <option key={value} value={value}>
-                          {completed}
-                        </option>
-                      );
-                    }
-                  )}
-                </select>
-              </>
-            )}
             <label className="pt-3">Disciplina</label>
             {otherChecked ? (
               <input
@@ -155,7 +101,7 @@ export default function Page() {
             ) : (
               <select
                 className={styles.textarea}
-                {...register("subject")}
+                {...register("subject", { required: true })}
                 defaultValue={DEFAULT_SUBJECT}
               >
                 {subjects.sort().map((subject) => {
@@ -167,12 +113,13 @@ export default function Page() {
                 })}
               </select>
             )}
+
             <span className="text-red-500 h-4">
               {errors?.subject && errors.subject.type === "required"
                 ? "Precisa inserir a disciplina"
                 : ""}
             </span>
-            <div className="mb-2">
+            <div>
               <input
                 className={styles.checkbox}
                 type="checkbox"
@@ -180,31 +127,79 @@ export default function Page() {
               />
               <label className="ml-3">outra</label>
             </div>
-            {exam === DEFAULT_EXAM ? null : (
-              <>
-                <label>Tipo de Questão</label>
-                <select
-                  {...register("category")}
-                  className={`${styles.textarea} mb-2`}
-                  defaultValue={DEFAULT_TYPE}
-                >
-                  <option value="multiple">{categoryMap["multiple"]}</option>
-                  <option value="discursive">
-                    {categoryMap["discursive"]}
-                  </option>
-                </select>
-              </>
-            )}
-          </div>
 
-          <label>Questão</label>
+            <label className="pt-2">Ano/Série</label>
+            <select className={styles.textarea} {...register("level")}>
+              {levels.map(
+                ({
+                  value,
+                  completed,
+                }: {
+                  value: string;
+                  completed: string;
+                }) => {
+                  return (
+                    <option key={value} value={value}>
+                      {completed}
+                    </option>
+                  );
+                }
+              )}
+            </select>
+
+            <label className="pt-2">Tipo de Questão</label>
+            <select
+              {...register("category")}
+              className={`${styles.textarea} mb-2`}
+              defaultValue={DEFAULT_CATEGORY}
+            >
+              <option value="multiple">{categoryMap["multiple"]}</option>
+              <option value="discursive">{categoryMap["discursive"]}</option>
+            </select>
+
+            <label htmlFor="quantity">Quantidade de Questões</label>
+
+            <input
+              className={`${styles.textarea} !h-8`}
+              type="number"
+              {...register("quantity", { required: true })}
+              defaultValue={DEFAULT_QUANTITY}
+            />
+            <span className="text-red-500 h-4">
+              {errors?.quantity && errors.quantity.type === "required"
+                ? "Precisa inserir a quantidade de questões"
+                : ""}
+            </span>
+            <label htmlFor="skillObject" className="pt-2">
+              Objetivos de Conhecimento
+            </label>
+            <input
+              className={styles.textarea}
+              {...register("skillObject", { required: true })}
+            ></input>
+            <span className="text-red-500 h-4">
+              {errors?.skillObject && errors.skillObject.type === "required"
+                ? "Precisa inserir um objetivo de conhecimento"
+                : ""}
+            </span>
+            <label htmlFor="learnerObject" className="pt-2">
+              Objetivos de Aprendizagem (opcional)
+            </label>
+            <input
+              className={styles.textarea}
+              {...register("learnerObject")}
+            ></input>
+          </div>
+          <label htmlFor="baseText" className="pt-2">
+            Texto Base (ou link)
+          </label>
           <textarea
-            className={`${styles.textarea}`}
-            {...register("question", { required: true })}
+            className={styles.textarea}
+            {...register("baseText", { required: true })}
           ></textarea>
           <span className="text-red-500 h-4">
-            {errors?.question && errors.question.type === "required"
-              ? "Precisa inserir uma questão"
+            {errors?.baseText && errors.baseText.type === "required"
+              ? "Precisa inserir um texto base ou um link."
               : ""}
           </span>
           <input className={styles.button} type="submit" value="Criar" />
@@ -216,7 +211,6 @@ export default function Page() {
         ) : (
           <p className="text-xl">Sua questão será gerada aqui:</p>
         )}
-
         <div
           dangerouslySetInnerHTML={{ __html: parsedResult }}
           className={`${styles.textarea} overflow-scroll`}
