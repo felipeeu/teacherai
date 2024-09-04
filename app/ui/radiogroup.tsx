@@ -1,4 +1,4 @@
-import styles from "@/app/ui/adapted.module.css";
+import styles from "@/app/ui/question.module.css";
 import React from "react";
 import { nunito } from "./fonts";
 
