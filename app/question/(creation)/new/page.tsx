@@ -38,6 +38,7 @@ export default function Page() {
       subject: DEFAULT_SUBJECT,
       level: DEFAULT_LEVEL,
       category: DEFAULT_CATEGORY,
+      quantity: DEFAULT_QUANTITY,
     },
   });
 
@@ -156,22 +157,13 @@ export default function Page() {
               <option value="multiple">{categoryMap["multiple"]}</option>
               <option value="discursive">{categoryMap["discursive"]}</option>
             </select>
-
-            <label htmlFor="quantity">Quantidade de Questões</label>
-
-            <input
-              className={`${styles.textarea} !h-8`}
-              type="number"
-              {...register("quantity", { required: true })}
-              defaultValue={DEFAULT_QUANTITY}
-            />
             <span className="text-red-500 h-4">
               {errors?.quantity && errors.quantity.type === "required"
                 ? "Precisa inserir a quantidade de questões"
                 : ""}
             </span>
             <label htmlFor="skillObject" className="pt-2">
-              Objetivos de Conhecimento
+              Objeto de Conhecimento
             </label>
             <input
               className={styles.textarea}
@@ -183,7 +175,7 @@ export default function Page() {
                 : ""}
             </span>
             <label htmlFor="learnerObject" className="pt-2">
-              Objetivos de Aprendizagem (opcional)
+              Objetivos de Aprendizagem
             </label>
             <input
               className={styles.textarea}
