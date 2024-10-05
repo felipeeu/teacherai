@@ -73,3 +73,38 @@ export const categoryMap: any = {
   multiple: "Múltipla Escolha",
   discursive: "Discursiva",
 };
+
+
+export enum Levels {
+  FUNDAMENTAL_SIXTH_GRADE = "6° ano do Ensino Fundamental",
+  FUNDAMENTAL_SEVENTH_GRADE = "7° ano do Ensino Fundamental",
+  FUNDAMENTAL_EIGHTH_GRADE = "8° ano do Ensino Fundamental",
+  FUNDAMENTAL_NINTH_GRADE = "9° ano do Ensino Fundamental",
+  HIGH_SCHOOL_FIRST_GRADE = "1ᵃ série do Ensino Médio",
+  HIGH_SCHOOL_SECOND_GRADE = "2ᵃ série do Ensino Médio",
+  HIGH_SCHOOL_THIRD_GRADE = "3ᵃ série do Ensino Médio",
+}
+
+export enum BnccSkills {
+  FUNDAMENTAL_NATURAL_SCIENCE = "Competências Específicas de Ciências da Natureza para o Ensino Fundamental Anos Finais",
+  FUNDAMENTAL_HUMAN_SCIENCE = "Competências Específicas de Ciências Humanas para o Ensino Fundamental Anos Finais",
+  FUNDAMENTAL_MATH_SCIENCE = "Competências Específicas de Matemática para o Ensino Fundamental Anos Finais",
+  FUNDAMENTAL_LANGUAGE_SCIENCE = "Competências Específicas de Linguagens para o Ensino Fundamental Anos Finais",
+  HIGH_SCHOOL_NATURAL_SCIENCE = "Competências Específicas de Ciências da Natureza e suas Tecnologias para o Ensino Médio",
+  HIGH_SCHOOL_HUMAN_SCIENCE = "Competências Específicas de Ciências Humanas e Sociais Aplicadas para o Ensino Médio",
+  HIGH_SCHOOL_MATH_SCIENCE = "Competências Específicas de Matemática e suas Tecnologias para o Ensino Médio",
+  HIGH_SCHOOL_LANGUAGE_SCIENCE = "Competências Específicas de Linguagens e suas Tecnologias para o Ensino Médio"
+}
+
+export enum Fields {
+  NATURAL_SCIENCE = "Ciências da Natureza",
+  HUMAN_SCIENCE = "Ciências Humanas",
+  MATH_SCIENCE = "Matemática",
+  LANGUAGE_SCIENCE = "Linguegens"
+}
+
+export enum Period {
+  FIRST_QUARTER = "1°  trimestre",
+  SECOND_QUARTER = "2°  trimestre",
+  THIRD_QUARTER = "3°  trimestre"
+}
