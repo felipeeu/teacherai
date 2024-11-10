@@ -1,4 +1,4 @@
-import { getAdeptedPrompt } from "@/app/lib/prompt";
+import { getAdaptedPrompt } from "@/app/lib/prompts";
 import { geminiApi } from "@/app/utils/geminiApi";
 import { GenerateContentResult } from "@google/generative-ai";
 import { NextResponse } from "next/server";
@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }
 
-  const prompt = getAdeptedPrompt(subject, type, question);
+  const prompt = getAdaptedPrompt(subject, type, question);
 
   try {
     const result: GenerateContentResult = await geminiApi(prompt, apiKey);
