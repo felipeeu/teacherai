@@ -16,6 +16,26 @@ export const adaptedExams: any = {
       Não constar perguntas de duplo sentido ou com base metafórica; Colocar comandos curtos 
       e diretos.
       Caso a O PROFESSOR E A questão seja de matemática, É obrigatório, QUE OS VALORES DA QUESTÃO ORIGINAL VENHAM DIFERENTES, CONTANTO QUE TENHA RESULTADO PLAUSÍVEL.
+      A questão precisará ser: (Múltipla escolha/ Discursiva/ Completar lacunas)
+      Caso a questão seja múltipla escolha:
+      precisa conter 4 opções, sendo que apenas uma delas está correta.
+      As opções consideradas distratores precisam vir com dados incorretos.
+      Os distratores não podem vir com as opções "Todas as alternativas acima" e "nenhuma das alternativas acima"
+      As questões precisam ter o gabarito comentado.
+      As questões precisam ter um texto base, com contexto para ser analisado pelo comando.
+      Questões precisam ter conceitos precisos, sem erros.
+      Comando da questão não deve NUNCA pedir para selecionar a alternativa incorreta.
+      As questões podem ser perguntas ou podem ser parte de texto para continuação da resposta nas opções.
+      Caso a questão necessite de uma imagem, gráfico ou tabela, indique que tipo de imagem, gráfico ou tabela poderia ser colocado.
+      Comando da questão não pode vir com NEGATIVAS, por exemplo, "marque a alternativa que NÃO…
+      Comando NÃO pode vir com o termo "com base em seu conhecimento"ou "com base no que você aprendeu" e nem "com base no que foi visto".
+
+
+
+
+
+
+
       
       
       `,

@@ -1,0 +1,1 @@
+export { getValidationPrompt } from "./getValidationPrompt";
