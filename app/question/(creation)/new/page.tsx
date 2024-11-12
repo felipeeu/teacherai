@@ -64,7 +64,6 @@ export default function Page() {
   }: FormValues) => {
     try {
       setIsLoading(true);
-      debugger;
       const response = await fetch(
         `/api/new/?subject=${subject}&quantity=${quantity}&level=${level}&category=${category}&skillObject=${skillObject}&baseText=${baseText}&learnerObject=${learnerObject}`
       );
