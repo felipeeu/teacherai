@@ -1,3 +1,8 @@
+interface level {
+  value: string;
+  completed: string;
+}
+
 export const adaptedExams: any = {
   tipo2: {
     instructions: `OBRIGATORIAMENTE Subdivisão em itens caso a pergunta exija mais de um comando, mas com, no máximo, dois ítens.
@@ -69,7 +74,7 @@ export const subjects = [
   "Literatura",
 ];
 
-export const levels: any[] = [
+export const levels: level[] = [
   { value: "6year", completed: "6° ano do Ensino Fundamental" },
   { value: "7year", completed: "7° ano do Ensino Fundamental" },
   { value: "8year", completed: "8° ano do Ensino Fundamental" },
@@ -77,6 +82,13 @@ export const levels: any[] = [
   { value: "1level", completed: "1ᵃ série do Ensino Médio" },
   { value: "2level", completed: "2ᵃ série do Ensino Médio" },
   { value: "3level", completed: "3ᵃ série do Ensino Médio" },
+];
+
+export const extendedLevels: level[] = [
+  ...levels,
+  { value: "5year", completed: "5° ano do Ensino Fundamental" },
+  { value: "4year", completed: "4° ano do Ensino Fundamental" },
+  { value: "3year", completed: "3° ano do Ensino Fundamental" },
 ];
 
 export const levelMap: any = {
@@ -89,11 +101,17 @@ export const levelMap: any = {
   "3level": "3ᵃ série do Ensino Médio",
 };
 
+export const extendedLevelsMap: any = {
+  ...levelMap,
+  "5year": "5° ano do Ensino Fundamental",
+  "4year": "4° ano do Ensino Fundamental",
+  "3year": "3° ano do Ensino Fundamental",
+};
+
 export const categoryMap: any = {
   multiple: "Múltipla Escolha",
   discursive: "Discursiva",
 };
-
 
 export enum Levels {
   FUNDAMENTAL_SIXTH_GRADE = "6° ano do Ensino Fundamental",
@@ -113,18 +131,18 @@ export enum BnccSkills {
   HIGH_SCHOOL_NATURAL_SCIENCE = "Competências Específicas de Ciências da Natureza e suas Tecnologias para o Ensino Médio",
   HIGH_SCHOOL_HUMAN_SCIENCE = "Competências Específicas de Ciências Humanas e Sociais Aplicadas para o Ensino Médio",
   HIGH_SCHOOL_MATH_SCIENCE = "Competências Específicas de Matemática e suas Tecnologias para o Ensino Médio",
-  HIGH_SCHOOL_LANGUAGE_SCIENCE = "Competências Específicas de Linguagens e suas Tecnologias para o Ensino Médio"
+  HIGH_SCHOOL_LANGUAGE_SCIENCE = "Competências Específicas de Linguagens e suas Tecnologias para o Ensino Médio",
 }
 
 export enum Fields {
   NATURAL_SCIENCE = "Ciências da Natureza",
   HUMAN_SCIENCE = "Ciências Humanas",
   MATH_SCIENCE = "Matemática",
-  LANGUAGE_SCIENCE = "Linguegens"
+  LANGUAGE_SCIENCE = "Linguegens",
 }
 
 export enum Period {
   FIRST_QUARTER = "1°  trimestre",
   SECOND_QUARTER = "2°  trimestre",
-  THIRD_QUARTER = "3°  trimestre"
+  THIRD_QUARTER = "3°  trimestre",
 }

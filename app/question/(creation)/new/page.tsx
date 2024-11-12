@@ -1,5 +1,5 @@
 "use client";
-import { categoryMap, levels, subjects } from "@/app/lib/data";
+import { categoryMap, extendedLevels, subjects } from "@/app/lib/data";
 import { parseMarkdown } from "@/app/lib/parsemd";
 import { nunito } from "@/app/ui/fonts";
 import styles from "@/app/ui/question.module.css";
@@ -64,6 +64,7 @@ export default function Page() {
   }: FormValues) => {
     try {
       setIsLoading(true);
+      debugger;
       const response = await fetch(
         `/api/new/?subject=${subject}&quantity=${quantity}&level=${level}&category=${category}&skillObject=${skillObject}&baseText=${baseText}&learnerObject=${learnerObject}`
       );
@@ -131,7 +132,7 @@ export default function Page() {
 
             <label className="pt-2">Ano/Série</label>
             <select className={styles.textarea} {...register("level")}>
-              {levels.map(
+              {extendedLevels.map(
                 ({
                   value,
                   completed,
@@ -157,11 +158,20 @@ export default function Page() {
               <option value="multiple">{categoryMap["multiple"]}</option>
               <option value="discursive">{categoryMap["discursive"]}</option>
             </select>
-            <span className="text-red-500 h-4">
-              {errors?.quantity && errors.quantity.type === "required"
-                ? "Precisa inserir a quantidade de questões"
-                : ""}
-            </span>
+
+            <label className="pt-2">Quantidade de Questão</label>
+            <select
+              {...register("quantity")}
+              className={`${styles.textarea} mb-2`}
+              defaultValue={DEFAULT_QUANTITY}
+            >
+              {["1", "2", "3"].map((quantity) => (
+                <option key={quantity} value={quantity}>
+                  {quantity}
+                </option>
+              ))}
+            </select>
+
             <label htmlFor="skillObject" className="pt-2">
               Objeto de Conhecimento
             </label>

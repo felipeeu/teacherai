@@ -1,3 +1,5 @@
+import { extendedLevelsMap } from "../../data";
+
 export const getNewQuestionPrompt = (
   subject: string,
   level: string,
@@ -8,9 +10,11 @@ export const getNewQuestionPrompt = (
   learnerObject?: string
 ): string => {
   return `
-  Sou professor de ${subject} de uma escola, para turmas de ${level}, e preciso criar ${quantity} questões ${category} para minha turma, para que eles possam fazer em uma avaliação formal. Estas questões precisam apresentar os conceitos dos objetos de conhecimento abordados, mas alcançando os objetivos estipulados.
+  Sou professor de ${subject} de uma escola, para turmas de ${
+    extendedLevelsMap[level]
+  }, e preciso criar ${quantity} questões ${category} para minha turma, para que eles possam fazer em uma avaliação formal. Estas questões precisam apresentar os conceitos dos objetos de conhecimento abordados, mas alcançando os objetivos estipulados.
 Abaixo, seguem os direcionamentos para a criação das questões:
-Questão que esteja adequada para alunos de ${level}
+Questão que esteja adequada para alunos de ${extendedLevelsMap[level]}
 Contexto, com qualidade de informações, retirado do texto base.
 O texto base DEVE SER OBRIGATORIAMENTE UTILIZADO.
 Os objetos de conhecimento DEVEM SER PRIORITARIAMENTE E OBRIGATORIAMENTE ABORDADOS.
