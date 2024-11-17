@@ -10,14 +10,15 @@ export async function GET(request: Request) {
   const question = searchParams.get("question") as string;
   const subject = searchParams.get("subject") as string;
   const type = searchParams.get("type") as string;
+  const category = searchParams.get("category") as string;
   const apiKey = process.env.GEMINI_API_KEY as string;
 
   if (!apiKey) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }
 
-  const prompt = getAdaptedPrompt(subject, type, question);
-
+  const prompt = getAdaptedPrompt({ subject, type, question, category });
+  console.log(prompt);
   try {
     const result: GenerateContentResult = await geminiApi(prompt, apiKey);
     return NextResponse.json({ response: result.response.text() });

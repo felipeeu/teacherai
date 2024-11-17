@@ -21,7 +21,6 @@ export const adaptedExams: any = {
       Não constar perguntas de duplo sentido ou com base metafórica; Colocar comandos curtos 
       e diretos.
       Caso a O PROFESSOR E A questão seja de matemática, É obrigatório, QUE OS VALORES DA QUESTÃO ORIGINAL VENHAM DIFERENTES, CONTANTO QUE TENHA RESULTADO PLAUSÍVEL.
-      A questão precisará ser: (Múltipla escolha/ Discursiva/ Completar lacunas)
       Caso a questão seja múltipla escolha:
       precisa conter 4 opções, sendo que apenas uma delas está correta.
       As opções consideradas distratores precisam vir com dados incorretos.
@@ -33,17 +32,7 @@ export const adaptedExams: any = {
       As questões podem ser perguntas ou podem ser parte de texto para continuação da resposta nas opções.
       Caso a questão necessite de uma imagem, gráfico ou tabela, indique que tipo de imagem, gráfico ou tabela poderia ser colocado.
       Comando da questão não pode vir com NEGATIVAS, por exemplo, "marque a alternativa que NÃO…
-      Comando NÃO pode vir com o termo "com base em seu conhecimento"ou "com base no que você aprendeu" e nem "com base no que foi visto".
-
-
-
-
-
-
-
-      
-      
-      `,
+      Comando NÃO pode vir com o termo "com base em seu conhecimento"ou "com base no que você aprendeu" e nem "com base no que foi visto".`,
   },
   tipo3: {
     instructions: `Simplificação da linguagem: Utilize frases curtas, vocabulário familiar e evite termos técnicos ou abstratos. Use linguagem clara e objetiva, evitando ambiguidades.
@@ -112,6 +101,12 @@ export const categoryMap: any = {
   multiple: "Múltipla Escolha",
   discursive: "Discursiva",
 };
+
+export enum Category {
+  MULTIPLE_CHOICE = "Múltipla Escolha",
+  DISCURSIVE = "Discursiva",
+  FILL_GAPS = "Completar Lacunas",
+}
 
 export enum Levels {
   FUNDAMENTAL_SIXTH_GRADE = "6° ano do Ensino Fundamental",
