@@ -1,4 +1,18 @@
-export const getValidationPrompt = ({ field, subject, period, level, question, skills }: { field: string, subject: string, period: string, level: string, question: string, skills: string }): string => {
+export const getValidationPrompt = ({
+  field,
+  subject,
+  period,
+  level,
+  question,
+  skills,
+}: {
+  field: string;
+  subject: string;
+  period: string;
+  level: string;
+  question: string;
+  skills: string;
+}): string => {
   return `
 Sou coordenador da área de ${field} e preciso validar as provas de ${period} em ${subject}.Para validar tais provas, eu preciso do seguinte:
 
@@ -17,7 +31,12 @@ Sou coordenador da área de ${field} e preciso validar as provas de ${period} em
 13 - Ao final, faça um resumo sobre sua análise.
 14 - Indique a quais habilidades da matriz de habilidades do ENEM, no link https://download.inep.gov.br/download/enem/matriz_referencia.pdf,  cada questão faz parte. Descreva essas habilidades. Não coloque apenas os códigos.
 15 - Ainda, indique quais as competências da BNNC para as ${skills} que estão representadas em cada questão.Caso nenhuma dessas consequências esteja contemplada em alguma questão, não precisa indicar para ela.Use o link: http://portal.mec.gov.br/docman/abril-2018-pdf/85121-bncc-ensino-medio/file
-16 - INDIQUE SE A PROVA PODE SER VALIDADA PARA IMPRESSÃO OU SE ELA PRECISA DE AJUSTES.
+16 - Indique se falta algum dado pra resolução ou se existe algum valor ou dado incoerente.
+17 - Indique se há realmente alguma alternativa correta.
+18 - Se nas questões objetivas não tiver alternativa correta, indique.
 
-As questões SÃO:  ${question}`
-}
+
+19 - INDIQUE SE A PROVA PODE SER VALIDADA PARA IMPRESSÃO OU SE ELA PRECISA DE AJUSTES.
+
+As questões SÃO:  ${question}`;
+};
