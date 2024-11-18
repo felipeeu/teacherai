@@ -1,0 +1,1 @@
+export { getAdaptedPrompt } from "./getAdaptedPrompt";

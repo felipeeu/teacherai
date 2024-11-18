@@ -1,3 +1,8 @@
+interface level {
+  value: string;
+  completed: string;
+}
+
 export const adaptedExams: any = {
   tipo2: {
     instructions: `OBRIGATORIAMENTE Subdivisão em itens caso a pergunta exija mais de um comando, mas com, no máximo, dois ítens.
@@ -16,9 +21,18 @@ export const adaptedExams: any = {
       Não constar perguntas de duplo sentido ou com base metafórica; Colocar comandos curtos 
       e diretos.
       Caso a O PROFESSOR E A questão seja de matemática, É obrigatório, QUE OS VALORES DA QUESTÃO ORIGINAL VENHAM DIFERENTES, CONTANTO QUE TENHA RESULTADO PLAUSÍVEL.
-      
-      
-      `,
+      Caso a questão seja múltipla escolha:
+      precisa conter 4 opções, sendo que apenas uma delas está correta.
+      As opções consideradas distratores precisam vir com dados incorretos.
+      Os distratores não podem vir com as opções "Todas as alternativas acima" e "nenhuma das alternativas acima"
+      As questões precisam ter o gabarito comentado.
+      As questões precisam ter um texto base, com contexto para ser analisado pelo comando.
+      Questões precisam ter conceitos precisos, sem erros.
+      Comando da questão não deve NUNCA pedir para selecionar a alternativa incorreta.
+      As questões podem ser perguntas ou podem ser parte de texto para continuação da resposta nas opções.
+      Caso a questão necessite de uma imagem, gráfico ou tabela, indique que tipo de imagem, gráfico ou tabela poderia ser colocado.
+      Comando da questão não pode vir com NEGATIVAS, por exemplo, "marque a alternativa que NÃO…
+      Comando NÃO pode vir com o termo "com base em seu conhecimento"ou "com base no que você aprendeu" e nem "com base no que foi visto".`,
   },
   tipo3: {
     instructions: `Simplificação da linguagem: Utilize frases curtas, vocabulário familiar e evite termos técnicos ou abstratos. Use linguagem clara e objetiva, evitando ambiguidades.
@@ -49,7 +63,7 @@ export const subjects = [
   "Literatura",
 ];
 
-export const levels: any[] = [
+export const levels: level[] = [
   { value: "6year", completed: "6° ano do Ensino Fundamental" },
   { value: "7year", completed: "7° ano do Ensino Fundamental" },
   { value: "8year", completed: "8° ano do Ensino Fundamental" },
@@ -57,6 +71,13 @@ export const levels: any[] = [
   { value: "1level", completed: "1ᵃ série do Ensino Médio" },
   { value: "2level", completed: "2ᵃ série do Ensino Médio" },
   { value: "3level", completed: "3ᵃ série do Ensino Médio" },
+];
+
+export const extendedLevels: level[] = [
+  ...levels,
+  { value: "5year", completed: "5° ano do Ensino Fundamental" },
+  { value: "4year", completed: "4° ano do Ensino Fundamental" },
+  { value: "3year", completed: "3° ano do Ensino Fundamental" },
 ];
 
 export const levelMap: any = {
@@ -69,11 +90,23 @@ export const levelMap: any = {
   "3level": "3ᵃ série do Ensino Médio",
 };
 
+export const extendedLevelsMap: any = {
+  ...levelMap,
+  "5year": "5° ano do Ensino Fundamental",
+  "4year": "4° ano do Ensino Fundamental",
+  "3year": "3° ano do Ensino Fundamental",
+};
+
 export const categoryMap: any = {
   multiple: "Múltipla Escolha",
   discursive: "Discursiva",
 };
 
+export enum Category {
+  MULTIPLE_CHOICE = "Múltipla Escolha",
+  DISCURSIVE = "Discursiva",
+  FILL_GAPS = "Completar Lacunas",
+}
 
 export enum Levels {
   FUNDAMENTAL_SIXTH_GRADE = "6° ano do Ensino Fundamental",
@@ -93,18 +126,18 @@ export enum BnccSkills {
   HIGH_SCHOOL_NATURAL_SCIENCE = "Competências Específicas de Ciências da Natureza e suas Tecnologias para o Ensino Médio",
   HIGH_SCHOOL_HUMAN_SCIENCE = "Competências Específicas de Ciências Humanas e Sociais Aplicadas para o Ensino Médio",
   HIGH_SCHOOL_MATH_SCIENCE = "Competências Específicas de Matemática e suas Tecnologias para o Ensino Médio",
-  HIGH_SCHOOL_LANGUAGE_SCIENCE = "Competências Específicas de Linguagens e suas Tecnologias para o Ensino Médio"
+  HIGH_SCHOOL_LANGUAGE_SCIENCE = "Competências Específicas de Linguagens e suas Tecnologias para o Ensino Médio",
 }
 
 export enum Fields {
   NATURAL_SCIENCE = "Ciências da Natureza",
   HUMAN_SCIENCE = "Ciências Humanas",
   MATH_SCIENCE = "Matemática",
-  LANGUAGE_SCIENCE = "Linguegens"
+  LANGUAGE_SCIENCE = "Linguegens",
 }
 
 export enum Period {
   FIRST_QUARTER = "1°  trimestre",
   SECOND_QUARTER = "2°  trimestre",
-  THIRD_QUARTER = "3°  trimestre"
+  THIRD_QUARTER = "3°  trimestre",
 }

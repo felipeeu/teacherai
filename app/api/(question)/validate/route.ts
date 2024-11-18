@@ -1,4 +1,4 @@
-import { getValidationPrompt } from "@/app/lib/prompt";
+import { getValidationPrompt } from "@/app/lib/prompts";
 import { geminiApi } from "@/app/utils/geminiApi";
 import { GenerateContentResult } from "@google/generative-ai";
 import { NextResponse } from "next/server";

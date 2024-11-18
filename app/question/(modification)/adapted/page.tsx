@@ -1,5 +1,5 @@
 "use client";
-import { categoryMap, levels, subjects } from "@/app/lib/data";
+import { Category, levels, subjects } from "@/app/lib/data";
 import { parseMarkdown } from "@/app/lib/parsemd";
 import { nunito } from "@/app/ui/fonts";
 import styles from "@/app/ui/question.module.css";
@@ -10,7 +10,7 @@ import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 
-const DEFAULT_EXAM = "adapted";
+const ADAPTED_EXAM = "adapted";
 const DEFAULT_TYPE = "tipo2";
 const DEFAULT_SUBJECT = "Química";
 const DEFAULT_CATEGORY = "multiple";
@@ -26,7 +26,7 @@ type FormValues = {
 export default function Page() {
   const outputRef = useRef(null);
   const [result, setResult] = useState("");
-  const [exam, setExam] = useState(DEFAULT_EXAM);
+  const [exam, setExam] = useState(ADAPTED_EXAM);
   const [otherChecked, setOtherChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -72,9 +72,9 @@ export default function Page() {
     try {
       setIsLoading(true);
       const response =
-        exam === DEFAULT_EXAM
+        exam === ADAPTED_EXAM
           ? await fetch(
-              `/api/adapted/?subject=${subject}&type=${type}&question=${question}`
+              `/api/adapted/?subject=${subject}&type=${type}&question=${question}&category=${category}`
             )
           : await fetch(
               `/api/substitute/?subject=${subject}&question=${question}&level=${level}&category=${category}`
@@ -112,7 +112,7 @@ export default function Page() {
               onChange={handleRadioButton}
               value={exam}
             />
-            {exam === DEFAULT_EXAM ? (
+            {exam === ADAPTED_EXAM ? (
               <>
                 <label>Adaptação</label>
                 <select
@@ -137,7 +137,7 @@ export default function Page() {
                       completed: string;
                     }) => {
                       return (
-                        <option key={value} value={value}>
+                        <option key={value} value={completed}>
                           {completed}
                         </option>
                       );
@@ -180,21 +180,26 @@ export default function Page() {
               />
               <label className="ml-3">outra</label>
             </div>
-            {exam === DEFAULT_EXAM ? null : (
-              <>
-                <label>Tipo de Questão</label>
-                <select
-                  {...register("category")}
-                  className={`${styles.textarea} mb-2`}
-                  defaultValue={DEFAULT_CATEGORY}
-                >
-                  <option value="multiple">{categoryMap["multiple"]}</option>
-                  <option value="discursive">
-                    {categoryMap["discursive"]}
+            <>
+              <label>Tipo de Questão</label>
+              <select
+                {...register("category")}
+                className={`${styles.textarea} mb-2`}
+                defaultValue={DEFAULT_CATEGORY}
+              >
+                <option value={Category.MULTIPLE_CHOICE}>
+                  {Category.MULTIPLE_CHOICE}
+                </option>
+                <option value={Category.DISCURSIVE}>
+                  {Category.DISCURSIVE}
+                </option>
+                {exam === ADAPTED_EXAM ? (
+                  <option value={Category.FILL_GAPS}>
+                    {Category.FILL_GAPS}
                   </option>
-                </select>
-              </>
-            )}
+                ) : null}
+              </select>
+            </>
           </div>
 
           <label>Questão</label>
