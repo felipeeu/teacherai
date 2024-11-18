@@ -18,7 +18,6 @@ export async function GET(request: Request) {
   }
 
   const prompt = getAdaptedPrompt({ subject, type, question, category });
-  console.log(prompt);
   try {
     const result: GenerateContentResult = await geminiApi(prompt, apiKey);
     return NextResponse.json({ response: result.response.text() });
