@@ -4,7 +4,6 @@ import { GenerateContentResult } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  debugger
   const { searchParams }: { searchParams: URLSearchParams } = new URL(
     request.url
   );
@@ -15,18 +14,20 @@ export async function GET(request: Request) {
   const period = searchParams.get("periiod") as string;
   const skills = searchParams.get("skills") as string;
 
-
   const apiKey = process.env.GEMINI_API_KEY as string;
 
   if (!apiKey) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }
 
-  const prompt: string = getValidationPrompt(
-    {
-      field, subject, period, level, question, skills
-    }
-  );
+  const prompt: string = getValidationPrompt({
+    field,
+    subject,
+    period,
+    level,
+    question,
+    skills,
+  });
 
   try {
     const result: GenerateContentResult = await geminiApi(prompt, apiKey);
