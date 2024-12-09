@@ -97,6 +97,7 @@ export default function Page() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col p-4 md:h-full">
+          <h1>Relacione Competências e Habilidades (BNCC)</h1>
           <div className="flex flex-col">
             <label className="pt-2">Ano/Série</label>
             <SelectLevel setValue={setValue} />
