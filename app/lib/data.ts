@@ -1,3 +1,5 @@
+import { LevelGroup } from "../types/levels";
+
 interface level {
   value: string;
   completed: string;
@@ -108,6 +110,12 @@ export enum Category {
   FILL_GAPS = "Completar Lacunas",
 }
 
+export enum ExtendedLevels {
+  FUNDAMENTAL_THIRD_GRADE = "3° ano do Ensino Fundamental",
+  FUNDAMENTAL_FOURTH_GRADE = "4° ano do Ensino Fundamental",
+  FUNDAMENTAL_FIFTH_GRADE = "5° ano do Ensino Fundamental",
+}
+
 export enum Levels {
   FUNDAMENTAL_SIXTH_GRADE = "6° ano do Ensino Fundamental",
   FUNDAMENTAL_SEVENTH_GRADE = "7° ano do Ensino Fundamental",
@@ -133,7 +141,7 @@ export enum Fields {
   NATURAL_SCIENCE = "Ciências da Natureza",
   HUMAN_SCIENCE = "Ciências Humanas",
   MATH_SCIENCE = "Matemática",
-  LANGUAGE_SCIENCE = "Linguegens",
+  LANGUAGE_SCIENCE = "Linguagens",
 }
 
 export enum Period {
@@ -141,3 +149,28 @@ export enum Period {
   SECOND_QUARTER = "2°  trimestre",
   THIRD_QUARTER = "3°  trimestre",
 }
+
+export const levelGroups: LevelGroup[] = [
+  {
+    name: "Ensino Fundamental",
+    id: "comp_fundamental",
+    levels: [
+      { id: 3, name: "3º ano E.F" },
+      { id: 4, name: "4º ano E.F" },
+      { id: 5, name: "5º ano E.F" },
+      { id: 6, name: "6º ano E.F" },
+      { id: 7, name: "7º ano E.F" },
+      { id: 8, name: "8º ano E.F" },
+      { id: 9, name: "9º ano E.F" },
+    ],
+  },
+  {
+    name: "Ensino Médio",
+    id: "comp_medio",
+    levels: [
+      { id: 1, name: "1ᵃ série E.M" },
+      { id: 2, name: "2ᵃ série E.M" },
+      { id: 3, name: "3ᵃ série E.M" },
+    ],
+  },
+];
