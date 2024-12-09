@@ -1,11 +1,5 @@
 "use client";
-import {
-  BnccSkills,
-  ExtendedLevels,
-  Fields,
-  Levels,
-  subjects,
-} from "@/app/lib/data";
+import { Fields, subjects } from "@/app/lib/data";
 import { parseMarkdown } from "@/app/lib/parsemd";
 import { nunito } from "@/app/ui/fonts";
 import styles from "@/app/ui/question.module.css";
@@ -19,26 +13,19 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Toaster } from "react-hot-toast";
-import competencies from "../../../../lib/json/competences.json";
-import skills from "../../../../lib/json/highSchool/skills.json";
+import toast, { Toaster } from "react-hot-toast";
+import competencies from "../../../lib/json/competences.json";
+import skills from "../../../lib/json/highSchool/skills.json";
 
 const DEFAULT_SUBJECT = "Química";
-const DEFAULT_LEVEL = Levels.FUNDAMENTAL_EIGHTH_GRADE;
-const DEFAULT_SKILLS = BnccSkills.FUNDAMENTAL_HUMAN_SCIENCE;
 const allFields: Fields[] = Object.values(Fields);
-
-const levels: Levels[] = Object.values(Levels);
-const extendedLevels: ExtendedLevels[] = Object.values(ExtendedLevels);
-const allLevels = [...extendedLevels, ...levels];
-const allSkills: BnccSkills[] = Object.values(BnccSkills);
 
 type FormValues = {
   field: string;
   subject: string;
   level: string;
   category: string;
-  skills: string;
+  skills: string[];
   competencies: string[];
 };
 export default function Page() {
@@ -55,8 +42,8 @@ export default function Page() {
     defaultValues: {
       field: Fields.NATURAL_SCIENCE,
       subject: DEFAULT_SUBJECT,
-      skills: DEFAULT_SKILLS,
       competencies: [],
+      skills: [],
     },
   });
 
@@ -79,23 +66,24 @@ export default function Page() {
     competencies,
   }: FormValues) => {
     const allCompetencies = competencies.join(" ");
-    debugger;
-    //   try {
-    //     setIsLoading(true);
+    const allSkills = skills.join(" ");
 
-    //     const response = await fetch(
-    //       `/api/validate/?subject=${subject}&field=${field}&level=${level}&skills=${skills}`
-    //     );
-    //     const data = await response.json();
-    //     if (data.response) {
-    //       setResult(data.response);
-    //       setIsLoading(false);
-    //     } else {
-    //       toast.error("Tente novamente mais tarde!");
-    //     }
-    //   } catch (error) {
-    //     toast.error(`${error}`);
-    //   }
+    try {
+      setIsLoading(true);
+
+      const response = await fetch(
+        `/api/relation/?subject=${subject}&field=${field}&level=${level}&skills=${allSkills}&competencies=${allCompetencies}`
+      );
+      const data = await response.json();
+      if (data.response) {
+        setResult(data.response);
+        setIsLoading(false);
+      } else {
+        toast.error("Tente novamente mais tarde!");
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    }
   };
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
   const parsedResult = parseMarkdown(result);
