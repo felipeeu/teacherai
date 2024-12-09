@@ -1,4 +1,4 @@
-import { LevelGroup } from "../types/levels";
+import { LevelGroup } from "@/types/levels";
 
 interface level {
   value: string;

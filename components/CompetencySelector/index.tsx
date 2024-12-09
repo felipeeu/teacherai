@@ -1,4 +1,3 @@
-import { CompetenciasData } from "@/app/types/competencies";
 import {
   Accordion,
   AccordionContent,
@@ -12,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { CompetenciasData } from "@/types/competencies";
 import { useState } from "react";
 import { CompetencyList } from "./CompetencyList";
 import { LevelAccordion } from "./LevelAccordion";

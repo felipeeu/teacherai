@@ -12,6 +12,7 @@ import styles from "@/app/ui/question.module.css";
 import { copyText } from "@/app/utils/copyText";
 import { CompetencySelector } from "@/components/CompetencySelector";
 import { BasicSelect, SelectLevel } from "@/components/Select";
+import { SkillSelector } from "@/components/SkillSelector";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Toaster } from "react-hot-toast";
 import competencies from "../../../../lib/json/competences.json";
+import skills from "../../../../lib/json/highSchool/skills.json";
 
 const DEFAULT_SUBJECT = "Química";
 const DEFAULT_LEVEL = Levels.FUNDAMENTAL_EIGHTH_GRADE;
@@ -78,22 +80,22 @@ export default function Page() {
   }: FormValues) => {
     const allCompetencies = competencies.join(" ");
     debugger;
-    try {
-      setIsLoading(true);
+    //   try {
+    //     setIsLoading(true);
 
-      const response = await fetch(
-        `/api/validate/?subject=${subject}&field=${field}&level=${level}&skills=${skills}`
-      );
-      const data = await response.json();
-      if (data.response) {
-        setResult(data.response);
-        setIsLoading(false);
-      } else {
-        toast.error("Tente novamente mais tarde!");
-      }
-    } catch (error) {
-      toast.error(`${error}`);
-    }
+    //     const response = await fetch(
+    //       `/api/validate/?subject=${subject}&field=${field}&level=${level}&skills=${skills}`
+    //     );
+    //     const data = await response.json();
+    //     if (data.response) {
+    //       setResult(data.response);
+    //       setIsLoading(false);
+    //     } else {
+    //       toast.error("Tente novamente mais tarde!");
+    //     }
+    //   } catch (error) {
+    //     toast.error(`${error}`);
+    //   }
   };
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
   const parsedResult = parseMarkdown(result);
@@ -113,15 +115,6 @@ export default function Page() {
             <label htmlFor="field" className="pt-2">
               Área
             </label>
-            {/* <select className={styles.textarea} {...register("field")}>
-              {allFields.map((field: string) => {
-                return (
-                  <option key={field} value={field}>
-                    {field}
-                  </option>
-                );
-              })}
-            </select> */}
             <BasicSelect
               title={"Área"}
               options={allFields}
@@ -146,15 +139,13 @@ export default function Page() {
                 ? "Precisa inserir a disciplina"
                 : ""}
             </span>
-            <div>
+            <div className="pb-4">
               <Checkbox onCheckedChange={handleCheckBox} />
-              <label className="ml-3">outra</label>
+              <label className="ml-3 ">outra</label>
             </div>
-            <label htmlFor="skills" className="pt-2">
-              Competências
-            </label>
           </div>
           <CompetencySelector data={competencies} setValue={setValue} />
+          <SkillSelector data={skills} setValue={setValue} />
           <div className="flex justify-center pt-4">
             <Button className="active:shadow-md cursor-pointer" type="submit">
               Criar
