@@ -1,10 +1,10 @@
-import { Competency } from "@/app/types/competencies";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Competency } from "@/types/competencies";
 import { CompetencyList } from "./CompetencyList";
 
 interface LevelAccordionProps {
