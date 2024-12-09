@@ -1,0 +1,1 @@
+export { getRelationBnccPrompt } from "./getRelationBnccPrompt";
