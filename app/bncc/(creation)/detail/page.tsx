@@ -102,6 +102,7 @@ export default function Page() {
               Ano/Série
             </Label>
             <SelectLevel setValue={setValue} />
+
             <Label htmlFor="field" className="pt-2">
               Área
             </Label>
@@ -136,15 +137,19 @@ export default function Page() {
               <Label className="ml-3 ">outra</Label>
             </div>
           </div>
-          <Label htmlFor="details">Quantidade de Detalhamentos</Label>
-          <Input
-            type="number"
-            min={1}
-            max={10}
-            {...register("details", { required: true })}
-          />
-          <Label htmlFor="link">Material Base (link)</Label>
-          <Input {...register("link")} />
+          <div>
+            <Label htmlFor="details">Quantidade de Detalhamentos</Label>
+            <Input
+              type="number"
+              min={1}
+              max={10}
+              {...register("details", { required: true })}
+            />
+          </div>
+          <div className="py-4">
+            <Label htmlFor="link">Material Base (link)</Label>
+            <Input {...register("link")} />
+          </div>
           <SkillSelector data={skills} setValue={setValue} />
           <div className="flex justify-center pt-4">
             <Button className="active:shadow-md cursor-pointer" type="submit">
