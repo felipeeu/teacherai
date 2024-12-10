@@ -1,0 +1,195 @@
+"use client";
+import { Fields, subjects } from "@/app/lib/data";
+import { parseMarkdown } from "@/app/lib/parsemd";
+import { nunito } from "@/app/ui/fonts";
+import styles from "@/app/ui/question.module.css";
+import { copyText } from "@/app/utils/copyText";
+import { BasicSelect, SelectLevel } from "@/components/Select";
+import { SkillSelector } from "@/components/SkillSelector";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import skills from "../../../lib/json/highSchool/skills.json";
+
+const DEFAULT_SUBJECT = "Química";
+const allFields: Fields[] = Object.values(Fields);
+
+type FormValues = {
+  field: string;
+  subject: string;
+  level: string;
+  skills: string[];
+  details: number;
+  link: string;
+};
+export default function Page() {
+  const outputRef = useRef(null);
+  const [result, setResult] = useState("");
+  const [otherChecked, setOtherChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      field: Fields.NATURAL_SCIENCE,
+      subject: DEFAULT_SUBJECT,
+      link: " ",
+      skills: [],
+    },
+  });
+
+  const handleCheckBox = () => {
+    setOtherChecked((prev) => {
+      if (prev === false) {
+        setValue("subject", "");
+        return !prev;
+      } else {
+        setValue("subject", DEFAULT_SUBJECT);
+        return !prev;
+      }
+    });
+  };
+  const handleFetch = async ({
+    field,
+    subject,
+    level,
+    skills,
+    details,
+    link,
+  }: FormValues) => {
+    const allSkills = skills.join(" ");
+
+    try {
+      setIsLoading(true);
+
+      const response = await fetch(
+        `/api/details/?subject=${subject}&field=${field}&level=${level}&skills=${allSkills}&details=${details}&link=${link}`
+      );
+      const data = await response.json();
+      if (data.response) {
+        setResult(data.response);
+        setIsLoading(false);
+      } else {
+        toast.error("Tente novamente mais tarde!");
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  };
+  const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
+  const parsedResult = parseMarkdown(result);
+
+  return (
+    <div className={`${nunito.className} md:flex md:flex-row`}>
+      <Toaster />
+      <form
+        noValidate
+        className="md:w-3/5 md:h-[80vh]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="flex flex-col p-4 md:h-full">
+          <h1>Detalhamento de Competências e Habilidades (BNCC)</h1>
+          <div className="flex flex-col">
+            <Label htmlFor="level" className="pt-2">
+              Ano/Série
+            </Label>
+            <SelectLevel setValue={setValue} />
+            <Label htmlFor="field" className="pt-2">
+              Área
+            </Label>
+            <BasicSelect
+              title={"Área"}
+              options={allFields}
+              setValue={setValue}
+              formName="field"
+              placeholder="Selecione uma área"
+            />
+            <Label htmlFor="subject" className="pt-3">
+              Disciplina
+            </Label>
+            {otherChecked ? (
+              <Input {...register("subject", { required: true })} />
+            ) : (
+              <BasicSelect
+                title={"Área"}
+                options={subjects.sort()}
+                setValue={setValue}
+                formName="subject"
+                placeholder="Selecione uma Disciplina"
+              />
+            )}
+            <span className="text-red-500 h-4">
+              {errors?.subject && errors.subject.type === "required"
+                ? "Precisa inserir a disciplina"
+                : ""}
+            </span>
+            <div className="pb-4">
+              <Checkbox onCheckedChange={handleCheckBox} />
+              <Label className="ml-3 ">outra</Label>
+            </div>
+          </div>
+          <Label htmlFor="details">Quantidade de Detalhamentos</Label>
+          <Input
+            type="number"
+            min={1}
+            max={10}
+            {...register("details", { required: true })}
+          />
+          <Label htmlFor="link">Material Base (link)</Label>
+          <Input {...register("link")} />
+          <SkillSelector data={skills} setValue={setValue} />
+          <div className="flex justify-center pt-4">
+            <Button className="active:shadow-md cursor-pointer" type="submit">
+              Criar
+            </Button>
+          </div>
+        </div>
+      </form>
+      <div className="flex flex-col w-full p-4 h-[80vh]">
+        {isLoading ? (
+          <p className="animate-bounce text-xl">Criando Planilha. Aguarde!</p>
+        ) : (
+          <p className="text-xl">Sua resposta será retornada aqui:</p>
+        )}
+        <div
+          dangerouslySetInnerHTML={{ __html: parsedResult }}
+          className={`border h-screen overflow-scroll`}
+          ref={outputRef}
+        />
+
+        <div className="flex self-end justify-end h-auto w-10">
+          {result ? (
+            <Image
+              onClick={() => {
+                copyText(outputRef);
+              }}
+              className={"pt-2 cursor-pointer active:scale-[1.2] "}
+              src="/copy-text.svg"
+              alt="copy"
+              width={30}
+              height={10}
+              priority
+            />
+          ) : (
+            <div className="h-10" />
+          )}
+        </div>
+        {result ? (
+          <button className={styles.button} onClick={() => setResult("")}>
+            Limpar
+          </button>
+        ) : (
+          <div className="h-16" />
+        )}
+      </div>
+    </div>
+  );
+}
