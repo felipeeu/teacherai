@@ -12,8 +12,6 @@ export const adaptedExams: any = {
       Colocar, antes das perguntas relacionadas ao texto, o trecho correspondente que dê suporte a resposta.
       Não constar perguntas de duplo sentido ou com base metafórica.
       Colocar comandos curtos e diretos.
-      OBRIGATORIAMENTE A nova questão formulada DEVERÁ SEMPRE vir escrita na mesma língua de origem que a questão original, ou seja, se ela vier em inglês, deverá vir totalmente escrita em inglês.
-      SE A QUESTÃO ORIGINAL FOR DE INGLÊS OU ESPANHOL A NOVA QUESTÃO NUNCA DEVERÁ VIR ESCRITA EM PORTUGUÊS.
       Dividir o enunciado em partes, definindo a parte I com os dados principais da questão
       e a parte 2 com o(s) comando(s). Lembre-se que a Parte I precisa seguir os parâmetros: 
       Textos mais curtos ou desmembrados, colocar, antes das perguntas relacionadas ao texto, 
