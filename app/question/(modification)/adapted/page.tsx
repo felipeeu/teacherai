@@ -2,10 +2,10 @@
 import { AdaptedType, Category, Levels, subjects } from "@/app/lib/data";
 import { parseMarkdown } from "@/app/lib/parsemd";
 import { nunito } from "@/app/ui/fonts";
-import styles from "@/app/ui/question.module.css";
 import { copyText } from "@/app/utils/copyText";
 import { CustomLabelXl } from "@/components/CustomLabel";
 import { BasicSelect } from "@/components/Select";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -215,11 +215,9 @@ export default function Page() {
                 : ""}
             </span>
           </div>
-          <Input
-            className="w-1/4 self-center bg-[#062C53] text-white"
-            type="submit"
-            value="Criar"
-          />
+          <Button className="w-1/4 self-center" type="submit">
+            <span>Criar</span>
+          </Button>
         </div>
       </form>
 
@@ -256,10 +254,10 @@ export default function Page() {
             <div className="h-10" />
           )}
         </div>
-        {result ? (
-          <button className={styles.button} onClick={() => setResult("")}>
-            Limpar
-          </button>
+        {true ? (
+          <Button className="w-1/4 self-center" onClick={() => setResult("")}>
+            <span>Limpar</span>
+          </Button>
         ) : (
           <div className="h-16" />
         )}
