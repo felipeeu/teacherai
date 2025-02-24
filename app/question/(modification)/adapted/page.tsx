@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import { Fragment, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -216,7 +217,13 @@ export default function Page() {
             </span>
           </div>
           <Button className="w-1/4 self-center" type="submit">
-            <span>Criar</span>
+            <span>
+              {isLoading ? (
+                <LoaderCircle className="animate-spin-continuous" />
+              ) : (
+                "Criar"
+              )}
+            </span>
           </Button>
         </div>
       </form>
@@ -226,12 +233,7 @@ export default function Page() {
           result ? "" : "hidden"
         }`}
       >
-        {isLoading ? (
-          <p className="animate-bounce text-xl">Gerando questão. Aguarde!</p>
-        ) : (
-          <p className="text-xl">Sua questão será gerada aqui:</p>
-        )}
-
+        <p className="text-xl">Sua questão será gerada aqui:</p>
         <div
           dangerouslySetInnerHTML={{ __html: parsedResult }}
           className={`border h-[70vh] overflow-auto`}

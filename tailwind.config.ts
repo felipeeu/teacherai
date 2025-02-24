@@ -65,6 +65,10 @@ const config: Config = {
         },
       },
       keyframes: {
+        "spin-continuous": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
         "accordion-down": {
           from: {
             height: "0",
@@ -85,6 +89,7 @@ const config: Config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "spin-continuous": "spin-continuous 0.5s linear infinite",
       },
     },
   },
