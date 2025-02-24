@@ -4,9 +4,13 @@ interface level {
   value: string;
   completed: string;
 }
+export enum AdaptedType {
+  TYPE_TWO = "Tipo 2",
+  TYPE_THREE = "Tipo 3",
+}
 
 export const adaptedExams: any = {
-  tipo2: {
+  [AdaptedType.TYPE_TWO]: {
     instructions: `OBRIGATORIAMENTE Subdivisão em itens caso a pergunta exija mais de um comando, mas com, no máximo, dois ítens.
       Textos mais curtos ou desmembrados.
       Colocar, antes das perguntas relacionadas ao texto, o trecho correspondente que dê suporte a resposta.
@@ -34,7 +38,7 @@ export const adaptedExams: any = {
       Comando da questão não pode vir com NEGATIVAS, por exemplo, "marque a alternativa que NÃO…
       Comando NÃO pode vir com o termo "com base em seu conhecimento"ou "com base no que você aprendeu" e nem "com base no que foi visto".`,
   },
-  tipo3: {
+  [AdaptedType.TYPE_THREE]: {
     instructions: `Simplificação da linguagem: Utilize frases curtas, vocabulário familiar e evite termos técnicos ou abstratos. Use linguagem clara e objetiva, evitando ambiguidades.
       Redução da quantidade de informações: Apresente as informações de forma concisa, focando nos pontos essenciais. Divida o texto em parágrafos menores e use recursos visuais como imagens, gráficos ou tabelas para facilitar a compreensão.
       Uso de exemplos concretos: Utilize exemplos do cotidiano do aluno para ilustrar conceitos abstratos e facilitar a aplicação do conhecimento.
@@ -102,6 +106,31 @@ export const categoryMap: any = {
   discursive: "Discursiva",
 };
 
+export const levelGroups: LevelGroup[] = [
+  {
+    name: "Ensino Fundamental",
+    id: "comp_fundamental",
+    levels: [
+      { id: 3, name: "3º ano E.F" },
+      { id: 4, name: "4º ano E.F" },
+      { id: 5, name: "5º ano E.F" },
+      { id: 6, name: "6º ano E.F" },
+      { id: 7, name: "7º ano E.F" },
+      { id: 8, name: "8º ano E.F" },
+      { id: 9, name: "9º ano E.F" },
+    ],
+  },
+  {
+    name: "Ensino Médio",
+    id: "comp_medio",
+    levels: [
+      { id: 1, name: "1ᵃ série E.M" },
+      { id: 2, name: "2ᵃ série E.M" },
+      { id: 3, name: "3ᵃ série E.M" },
+    ],
+  },
+];
+
 export enum Category {
   MULTIPLE_CHOICE = "Múltipla Escolha",
   DISCURSIVE = "Discursiva",
@@ -147,28 +176,3 @@ export enum Period {
   SECOND_QUARTER = "2°  trimestre",
   THIRD_QUARTER = "3°  trimestre",
 }
-
-export const levelGroups: LevelGroup[] = [
-  {
-    name: "Ensino Fundamental",
-    id: "comp_fundamental",
-    levels: [
-      { id: 3, name: "3º ano E.F" },
-      { id: 4, name: "4º ano E.F" },
-      { id: 5, name: "5º ano E.F" },
-      { id: 6, name: "6º ano E.F" },
-      { id: 7, name: "7º ano E.F" },
-      { id: 8, name: "8º ano E.F" },
-      { id: 9, name: "9º ano E.F" },
-    ],
-  },
-  {
-    name: "Ensino Médio",
-    id: "comp_medio",
-    levels: [
-      { id: 1, name: "1ᵃ série E.M" },
-      { id: 2, name: "2ᵃ série E.M" },
-      { id: 3, name: "3ᵃ série E.M" },
-    ],
-  },
-];

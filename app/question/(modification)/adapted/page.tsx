@@ -1,20 +1,26 @@
 "use client";
-import { Category, levels, subjects } from "@/app/lib/data";
+import { AdaptedType, Category, Levels, subjects } from "@/app/lib/data";
 import { parseMarkdown } from "@/app/lib/parsemd";
 import { nunito } from "@/app/ui/fonts";
-import styles from "@/app/ui/question.module.css";
-import RadioGroup from "@/app/ui/radiogroup";
 import { copyText } from "@/app/utils/copyText";
+import { CustomLabelXl } from "@/components/CustomLabel";
+import { BasicSelect } from "@/components/Select";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 
 const ADAPTED_EXAM = "adapted";
-const DEFAULT_TYPE = "tipo2";
+const DEFAULT_TYPE = "Tipo 3";
 const DEFAULT_SUBJECT = "Química";
-const DEFAULT_CATEGORY = "multiple";
-const DEFAULT_LEVEL = "8year";
+const DEFAULT_CATEGORY = Category.MULTIPLE_CHOICE;
+const DEFAULT_LEVEL = Levels.FUNDAMENTAL_EIGHTH_GRADE;
 
 type FormValues = {
   type: string;
@@ -23,6 +29,16 @@ type FormValues = {
   level: string;
   category: string;
 };
+const types = Object.values(AdaptedType);
+const levels = Object.values(Levels);
+const getCategories = (exam: string) =>
+  Object.values(Category).filter((category) =>
+    exam === ADAPTED_EXAM ? category : category !== Category.FILL_GAPS
+  );
+const radioOptions = [
+  { id: "adapted", value: "adapted", label: "Adaptada" },
+  { id: "second", value: "second", label: "Substitutiva" },
+];
 export default function Page() {
   const outputRef = useRef(null);
   const [result, setResult] = useState("");
@@ -33,6 +49,7 @@ export default function Page() {
     register,
     handleSubmit,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -51,13 +68,14 @@ export default function Page() {
         return !prev;
       } else {
         setValue("subject", DEFAULT_SUBJECT);
+        setError("subject", {});
         return !prev;
       }
     });
   };
 
-  const handleRadioButton = (value: string) => {
-    setExam(value);
+  const handleRadioButton = (event: any) => {
+    setExam(event.target.value);
     setValue("level", DEFAULT_LEVEL);
     setValue("category", DEFAULT_CATEGORY);
   };
@@ -97,134 +115,128 @@ export default function Page() {
   const onSubmit: SubmitHandler<FormValues> = (data) => handleFetch(data);
   const parsedResult = parseMarkdown(result);
   return (
-    <div className={`${nunito.className} md:flex md:flex-row`}>
+    <div className={`${nunito.className} md:flex md:flex-row text-primary`}>
       <Toaster />
-      <form className="md:w-3/5 md:h-[80vh]" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col p-4 md:h-full">
-          <div className="flex flex-col">
-            <RadioGroup
-              options={[
-                { id: "adapted", value: "adapted", label: "Adaptada" },
-                { id: "second", value: "second", label: "Substitutiva" },
-              ]}
-              title={"Escolha o tipo de Prova:"}
-              name={"exam"}
-              onChange={handleRadioButton}
-              value={exam}
-            />
-            {exam === ADAPTED_EXAM ? (
-              <>
-                <label>Adaptação</label>
-                <select
-                  {...register("type")}
-                  className={styles.textarea}
-                  defaultValue={DEFAULT_TYPE}
-                >
-                  <option value="tipo2">Tipo 2</option>
-                  <option value="tipo3">Tipo 3</option>
-                </select>
-              </>
-            ) : (
-              <>
-                <label className="pt-3">Ano/Série</label>
-                <select className={styles.textarea} {...register("level")}>
-                  {levels.map(
-                    ({
-                      value,
-                      completed,
-                    }: {
-                      value: string;
-                      completed: string;
-                    }) => {
-                      return (
-                        <option key={value} value={completed}>
-                          {completed}
-                        </option>
-                      );
-                    }
-                  )}
-                </select>
-              </>
-            )}
-            <label className="pt-3">Disciplina</label>
+      <form
+        className={`md:w-3/5 ${result ? "md:w-3/5 hidden" : ""}`}
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="flex flex-col space-y-6 p-4">
+          <RadioGroup
+            onChange={handleRadioButton}
+            defaultValue={ADAPTED_EXAM}
+            name={"exam"}
+            className="flex space-x-2 py-4"
+          >
+            {radioOptions.map(({ id, value, label }) => {
+              return (
+                <div key={id} className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={value}
+                    id={id}
+                    defaultChecked
+                    className="text-primary-foreground"
+                  />
+                  <CustomLabelXl htmlFor={value}>{label}</CustomLabelXl>
+                </div>
+              );
+            })}
+          </RadioGroup>
+          {exam === ADAPTED_EXAM ? (
+            <Fragment>
+              <CustomLabelXl htmlFor="type">Tipo de Adaptação</CustomLabelXl>
+              <BasicSelect
+                title={"Adaptação"}
+                options={types}
+                setValue={setValue}
+                formName="type"
+                placeholder="Selecione um tipo de adaptação"
+              />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <CustomLabelXl htmlFor="level">Ano/Série</CustomLabelXl>
+              <BasicSelect
+                title={"Ano/Série"}
+                options={levels}
+                setValue={setValue}
+                formName="level"
+                placeholder="Selecione uma série ou ano"
+              />
+            </Fragment>
+          )}
+          <Fragment>
+            <CustomLabelXl htmlFor="subject">Disciplina</CustomLabelXl>
             {otherChecked ? (
-              <input
+              <Input
+                title="Disciplina"
+                placeholder="Insira a disciplina"
                 {...register("subject", { required: true })}
-                className={styles.textarea}
               />
             ) : (
-              <select
-                className={styles.textarea}
-                {...register("subject")}
-                defaultValue={DEFAULT_SUBJECT}
-              >
-                {subjects.sort().map((subject) => {
-                  return (
-                    <option key={subject} value={subject}>
-                      {subject}
-                    </option>
-                  );
-                })}
-              </select>
+              <BasicSelect
+                title={"Disciplina"}
+                options={subjects}
+                setValue={setValue}
+                formName="subject"
+                placeholder="Selecione uma Disciplina"
+              />
             )}
+            {errors?.subject && errors.subject.type === "required" ? (
+              <span className="text-red-500 h-4">
+                {"Precisa inserir a disciplina"}
+              </span>
+            ) : null}
+          </Fragment>
+
+          <div className="flex">
+            <Input className="w-4" type="checkbox" onChange={handleCheckBox} />
+            <Label className="py-3 px-2 font-semibold">outra disciplina</Label>
+          </div>
+          <Fragment>
+            <CustomLabelXl htmlFor="category">Tipo de Questão</CustomLabelXl>
+
+            <BasicSelect
+              title={"Tipo de Questão"}
+              options={getCategories(exam)}
+              setValue={setValue}
+              formName="category"
+              placeholder="Selecione um tipo de questão"
+            />
+          </Fragment>
+          <div className="h-[480px] pb-4">
+            <CustomLabelXl htmlFor="question">Questão</CustomLabelXl>
+            <Textarea
+              className="h-full"
+              {...register("question", { required: true })}
+            ></Textarea>
             <span className="text-red-500 h-4">
-              {errors?.subject && errors.subject.type === "required"
-                ? "Precisa inserir a disciplina"
+              {errors?.question && errors.question.type === "required"
+                ? "Precisa inserir uma questão"
                 : ""}
             </span>
-            <div className="mb-2">
-              <input
-                className={styles.checkbox}
-                type="checkbox"
-                onChange={handleCheckBox}
-              />
-              <label className="ml-3">outra</label>
-            </div>
-            <>
-              <label>Tipo de Questão</label>
-              <select
-                {...register("category")}
-                className={`${styles.textarea} mb-2`}
-                defaultValue={DEFAULT_CATEGORY}
-              >
-                <option value={Category.MULTIPLE_CHOICE}>
-                  {Category.MULTIPLE_CHOICE}
-                </option>
-                <option value={Category.DISCURSIVE}>
-                  {Category.DISCURSIVE}
-                </option>
-                {exam === ADAPTED_EXAM ? (
-                  <option value={Category.FILL_GAPS}>
-                    {Category.FILL_GAPS}
-                  </option>
-                ) : null}
-              </select>
-            </>
           </div>
-
-          <label>Questão</label>
-          <textarea
-            className={`${styles.textarea}`}
-            {...register("question", { required: true })}
-          ></textarea>
-          <span className="text-red-500 h-4">
-            {errors?.question && errors.question.type === "required"
-              ? "Precisa inserir uma questão"
-              : ""}
-          </span>
-          <input className={styles.button} type="submit" value="Criar" />
+          <Button className="w-1/4 self-center" type="submit">
+            <span>
+              {isLoading ? (
+                <LoaderCircle className="animate-spin-continuous" />
+              ) : (
+                "Criar"
+              )}
+            </span>
+          </Button>
         </div>
       </form>
-      <div className="flex flex-col w-full p-4 h-[80vh]">
-        {isLoading ? (
-          <p className="animate-bounce text-xl">Gerando questão. Aguarde!</p>
-        ) : (
-          <p className="text-xl">Sua questão será gerada aqui:</p>
-        )}
 
+      <div
+        className={`md:flex md:flex-col md:w-full py-6 md:p-4 md:h-[80vh] ${
+          result ? "" : "hidden"
+        }`}
+      >
+        <p className="text-xl">Sua questão será gerada aqui:</p>
         <div
           dangerouslySetInnerHTML={{ __html: parsedResult }}
-          className={`${styles.textarea} overflow-scroll`}
+          className={`border h-[70vh] overflow-auto`}
           ref={outputRef}
         />
         <div className="flex self-end justify-end h-auto w-10">
@@ -244,10 +256,10 @@ export default function Page() {
             <div className="h-10" />
           )}
         </div>
-        {result ? (
-          <button className={styles.button} onClick={() => setResult("")}>
-            Limpar
-          </button>
+        {true ? (
+          <Button className="w-1/4 self-center" onClick={() => setResult("")}>
+            <span>Limpar</span>
+          </Button>
         ) : (
           <div className="h-16" />
         )}

@@ -15,6 +15,7 @@ export function BasicSelect({
   title,
   formName,
   placeholder,
+  ...props
 }: {
   options: any[];
   setValue: any;
@@ -23,7 +24,7 @@ export function BasicSelect({
   placeholder: string;
 }) {
   return (
-    <Select onValueChange={(value) => setValue(formName, value)}>
+    <Select onValueChange={(value) => setValue(formName, value)} {...props}>
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

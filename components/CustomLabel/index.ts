@@ -1,0 +1,1 @@
+export { CustomLabelXl } from "./CustomLabelXl";
