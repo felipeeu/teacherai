@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   const category = searchParams.get("category") as string;
   const apiKey = process.env.GEMINI_API_KEY as string;
 
-  if (!apiKey) {
+  if (!apiKey || apiKey === undefined) {
     return NextResponse.json({ error: "Missing API key" }, { status: 500 });
   }
 
@@ -23,6 +23,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ response: result.response.text() });
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ error: "An error occurred" }, { status: 500 });
+    return NextResponse.json({ error: error });
   }
 }
