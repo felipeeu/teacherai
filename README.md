@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TeacherAI
 
-## Getting Started
+TeacherAI is a web application built with Next.js, React and TypeScript to support educational workflows using generative AI.
 
-First, run the development server:
+The project explores how AI can assist teachers in creating and adapting educational content based on subjects, school levels, competencies and learning goals.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- Radix UI
+- React Hook Form
+- Jest
+- Google Generative AI API
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Main Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Generate educational questions with AI
+- Adapt questions for different learning contexts
+- Validate generated questions
+- Generate competency and skill descriptions
+- Work with BNCC-related educational data
+- Select school level, subject and skills through reusable form components
+- Render AI-generated structured content in the interface
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+The application uses the Next.js App Router.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+app/
+├── api/
+│   ├── (bncc)/
+│   └── (question)/
+│
+├── bncc/
+│   └── (creation)/
+│
+├── lib/
+│   ├── prompts/
+│   ├── json/
+│   └── data.ts
+│
+└── utils/
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+components/
+├── CompetencySelector/
+├── Select/
+├── SkillSelector/
+└── ui/
